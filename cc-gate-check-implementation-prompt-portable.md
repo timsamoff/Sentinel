@@ -43,7 +43,7 @@ For each validated proposal, write the actual check using the automation mechani
 - Respect the exceptions mechanism — read the exceptions file if one is designed/exists, honor unexpired entries, fail exactly as if no exception existed once an entry's review-by date has passed
 - Apply per-surface correctly, per the Scope determination (one shared check, or one instance per surface, as appropriate)
 
-Implement the commit-convention checks (brief summary, no description overflow, single-sentence bullets only if a description is truly needed, no co-author notes, single-commit-by-default guidance) and the README-touched-when-user-facing-change check as real enforced checks here, not just descriptions of what they should do.
+Implement the commit-convention checks as a hook that mechanically enforces, not merely instructs: subject line is a single line with no wrapping; a commit with nothing more to say has no body at all; if a body exists, every line is its own short single-sentence bullet, never a narrative paragraph; and any co-author note, "Generated with Claude Code" attribution, or session-link trailer (e.g. `Claude-Session:`) is stripped or the commit is rejected outright. Treat instructing CC not to add these as insufficient on its own — CC's settings-level attribution controls are documented as unreliable, so the hook itself is the enforcement, not a suggestion CC is trusted to follow. Also implement the README-touched-when-user-facing-change check as a real enforced check here, not just a description.
 
 ### Part 3 — Test each check
 
