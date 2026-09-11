@@ -1,7 +1,5 @@
 # Sentinel
 
-***Rigorous, repeatable quality gates for any Claude Code project, in any language.***
-
 Four Claude Code prompts that add a rigorous, repeatable quality and integration-completeness process to any code or design-based project — discovering what the project actually is, auditing its code and design quality, auditing what future changes need to touch, and then building and wiring in the automated checks that hold all of it in place going forward. Run in order; each one produces artifacts the next one reads.
 
 ## What's here
@@ -39,7 +37,7 @@ Either works. The copy-paste route guarantees CC only sees the actual instructio
 - `scratch/` — a gitignored, project-local spot for throwaway verification scripts, so permission rules can actually target a stable path
 - `INTEGRATION_CHECKLIST.md` — the touchpoint checklist and gate-check description
 - A `sentinel-exceptions` file — the documented, owned, expiring exceptions a gate check can accept instead of blocking forever or silently passing
-- An actual pre-commit hook (or your project's equivalent CI step) enforcing it all
+- An actual pre-commit hook (or your project's equivalent CI step) enforcing it all, plus a separate full-repo scan mode for catching drift the incremental hook can't see — history predating the checks, manual edits outside a commit, interactions between separately-valid commits — triggered automatically via a CI schedule or a `pre-push` hook rather than run on every commit, since a full scan is too slow to pay for on every commit without discouraging small commits or training people to bypass it
 
 ## License
 
