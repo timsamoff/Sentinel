@@ -13,6 +13,8 @@ Paste this to Claude Code as its own session/task, separate from feature work. B
 
 You are auditing this project's own development history to find every place a "new component," "new feature," or "new [PROJECT-SPECIFIC: the recurring unit of work in this codebase — e.g. component type, endpoint, screen, model field, CLI subcommand, message/event type, game entity type, infrastructure resource]" has ever needed to touch — including places that were touched *late* or *after a bug was found* rather than up front. Do not rely on your general sense of good practice — ground every item in something that actually happened in this codebase, by reading its real history (commits, session notes, CLAUDE.md, changelogs). Where you're not sure something is a real touchpoint, say so explicitly rather than guessing.
 
+When you ask the user anything — one of this prompt's own scripted questions or something that comes up along the way — phrase it in plain language a non-specialist could follow. Say what's actually being decided before naming any internal mechanism, rule, or file involved. The person commissioned this audit; they shouldn't need to already track its internals to answer a question about their own project.
+
 **If there's no git.** The commit conventions in Part 4 only make sense where commits exist — if this project doesn't use git (or any VCS), skip Part 4's commit-message conventions entirely and note in the checklist that gating will happen via a manually-run command instead (the Gate-Check Implementation prompt builds this). The touchpoint logic in Part 1 and the CLAUDE.md/README checks in Part 2 apply regardless of VCS or its absence — those aren't commit-shaped, they're about whether the code and docs changed together.
 
 

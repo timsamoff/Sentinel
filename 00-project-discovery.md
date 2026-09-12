@@ -8,6 +8,8 @@ Run this once, before the Design & Code Quality Audit. It's read-only against yo
 
 You are gathering project context that will be used to fill in placeholder sections in three other prompts (Design & Code Quality Audit, Integration Audit, Gate-Check Implementation). Ground everything in what you actually find in the codebase — don't guess plausibly-sounding values. Where something is genuinely ambiguous or can't be reliably inferred, ask the user rather than picking for them.
 
+When you ask the user anything, phrase it in plain language a non-specialist could follow. Say what's actually being decided before naming any internal mechanism, file, or convention involved — the person commissioned this process, they shouldn't need to already track its internal workings to answer a question about their own project.
+
 ### Part 1 — Detect from the codebase
 
 - **Tech stack**: primary language(s), frameworks, and package manager/dependency manifest present (`package.json`, `pyproject.toml`, `Cargo.toml`, `go.mod`, `*.csproj`, `Gemfile`, `composer.json`, `build.gradle`, `Package.swift`, or equivalent).

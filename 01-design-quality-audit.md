@@ -14,6 +14,8 @@ Fill in `[PROJECT-SPECIFIC]` brackets before handing this to Claude Code.
 
 You are auditing this project's codebase and design implementation for quality, consistency, and best practice — not for missing wiring (that's a separate audit). Ground every finding in something you can point to in the actual code, not general opinion. Where a finding is subjective or arguable, say so and give your reasoning rather than stating it as fact.
 
+When you ask the user anything — one of this prompt's own scripted questions or something that comes up along the way — phrase it in plain language a non-specialist could follow. Say what's actually being decided before naming any internal mechanism, rule, or file involved, and make sure each option offered is a complete, actionable choice on its own rather than a fragment of engineering detail. The person commissioned this audit; they shouldn't need to already track its internals to answer a question about their own project.
+
 **Applicability — identify your domain before running Parts 2-8, don't assume it's web.** These parts were originally written against a web UI and still use web/mobile/game examples throughout, but the examples are illustrative, not exhaustive — the underlying questions (single source of truth, consistency, accessibility, whether something reads as unconsidered) are about *how a project manages its own presentational decisions*, whatever form that takes. Before running Parts 2-8, identify which of these three cases actually fits:
 
 - **Full visual GUI** (web, native mobile, desktop toolkit, game engine): Parts 2-8 apply close to as written, adapted to the platform's actual style mechanism using the per-part notes below as a starting point.
