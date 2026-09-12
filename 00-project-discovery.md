@@ -23,6 +23,7 @@ When you ask the user anything, phrase it in plain language a non-specialist cou
 - **Version/release status**: a version field from a manifest file if present, and whether git tags/releases exist — note whether this reads as pre-release/experimental or an established public project.
 - **Existing automation**: any git hooks, CI config, npm/package scripts, or a pre-commit framework already in place.
 - **Existing docs and scaffolding**: whether `AGENTS.md`, `README`, `LICENSE`, `.gitignore`, `sentinel-notes/`, and `scratch/` already exist, noted but not read in full here — the other prompts handle reading their actual content and won't recreate what's already there.
+- **Existing design documentation**: check common conventions for a software/technical design document — `docs/DESIGN.md`, `docs/ARCHITECTURE.md`, a `docs/adr/` directory of individual decision records, or a doc linked from the README. If one exists, note its path — the Design & Code Quality Audit uses it as grounding for checking whether the actual implementation still matches documented intent, which is a different question from internal consistency.
 
 ### Part 2 — Ask the user directly
 
@@ -44,6 +45,7 @@ Produce `PROJECT_PROFILE.md` at the project root containing every value gathered
 - Version/release status
 - Existing automation detected
 - Which of AGENTS.md / README / LICENSE / .gitignore / sentinel-notes/ / scratch/ already exist
+- Path to an existing design document, if one was found (or "none found")
 
 End with a short "how to use this" note: when running the Design & Code Quality Audit or Integration Audit prompts, replace their `[PROJECT-SPECIFIC]` brackets using the corresponding values above rather than guessing fresh.
 
