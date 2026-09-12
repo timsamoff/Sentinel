@@ -11,6 +11,7 @@ You are gathering project context that will be used to fill in placeholder secti
 ### Part 1 — Detect from the codebase
 
 - **Tech stack**: primary language(s), frameworks, and package manager/dependency manifest present (`package.json`, `pyproject.toml`, `Cargo.toml`, `go.mod`, `*.csproj`, `Gemfile`, `composer.json`, `build.gradle`, `Package.swift`, or equivalent).
+- **Declared project name**: check whether the project already states its own name somewhere — a manifest's `name` field (`package.json`, `pyproject.toml`, `Cargo.toml`, `composer.json`), a `Package.swift` name, a `.csproj` assembly name, or a top-level README's title. If one exists, that's the candidate to confirm with the user in Part 2, not something to ask about from a blank slate.
 - **Application surfaces**: enumerate distinct top-level folders/packages the same way the other prompts' own Scope sections do (user-facing app, admin panel, demo site, internal tooling, or independent packages in a monorepo) — list them plainly, and note whether they share subsystems or run independently.
 - **Design/token system file**: search for likely candidates — a Tailwind config, a theme object, a CSS custom-properties block, a `design-tokens.json`, a platform color-asset catalog, or equivalent. This maps to Part 0 and Part 2's bracket in the Design & Code Quality Audit.
 - **Recurring unit of work**: infer the closest analog to "the thing that gets added to this project" — a component, an API endpoint, a screen, a model field, a CLI subcommand. This maps to the bracket on line 1 of the Integration Audit's "The prompt" section and Part 1/Part 2's brackets there.
@@ -21,7 +22,7 @@ You are gathering project context that will be used to fill in placeholder secti
 
 ### Part 2 — Ask the user directly
 
-- **What do you want this project called?** A repo or folder name is often not what someone actually wants used in generated docs and checklists — ask for the display name rather than defaulting to the folder name.
+- **What do you want this project called?** If Part 1 found a declared name (a manifest field, a README title), propose that as the default and just confirm it rather than asking from a blank slate — "Found `X` as the declared name — use that, or would you prefer something else?" A repo or folder name on its own is often not what someone actually wants used in generated docs and checklists, so if nothing was found and only a folder/repo name is available, don't default to it silently — ask.
 - If the design-token-file guess or the recurring-unit-of-work inference from Part 1 is genuinely ambiguous (more than one plausible candidate, or nothing found), confirm with the user rather than picking one silently.
 - If surface enumeration is ambiguous (unclear whether two folders are genuinely separate surfaces or one surface split across directories), confirm rather than guessing.
 
