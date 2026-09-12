@@ -97,7 +97,7 @@ This pass doubles as the baseline the full-scan mode's blocking logic uses (per 
 
 This one-time pass is not a substitute for the standing full-scan mode built in Part 2 — it just clears the starting backlog so the new check isn't immediately drowning in pre-existing noise. Ongoing drift after this point is exactly what the periodic full-scan mode exists to catch; don't let this Part 4 pass be mistaken for that ongoing coverage.
 
-Update `INTEGRATION_CHECKLIST.md` to mark each implemented item's status accordingly (e.g. implemented / partially implemented / deferred with reason), and update `sentinel-notes/TODO.md` to note which candidate gate-check items from the design audit were implemented, adjusted, or rejected, with a one-line reason for each.
+Update `INTEGRATION_CHECKLIST.md` to mark each implemented item's status accordingly (e.g. implemented / partially implemented / deferred with reason), and update `sentinel-notes/TODO.md` to note which candidate gate-check items from the design audit were implemented, adjusted, or rejected, with a one-line reason for each — following whatever completed-item convention is recorded at the top of `TODO.md` (deleted, struck through, or moved to a "Done" section), not your own default.
 
 ### Deliverables
 
