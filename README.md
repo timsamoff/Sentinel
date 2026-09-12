@@ -42,7 +42,7 @@ Either works. The copy-paste route guarantees the agent only sees the actual ins
 - `PROJECT_PROFILE.md` — the discovered/confirmed project context prompts 1 and 2 draw their bracketed values from, including which agent and tool-specific conventions apply
 - `AGENTS.md` (or `CLAUDE.md`, if that's what your agent uses) — the project's authoritative internal record of its own features and architecture (kept current going forward by the gate check in prompt 3)
 - `docs/DESIGN.md` — optional, only if you asked for one or already had one. A narrative overview for human readers, distinct from `AGENTS.md`'s operational role; if generated, it's explicitly labeled as reverse-engineered as-built documentation, not deliberate design rationale
-- `sentinel-notes/` — audit findings, a `TODO.md`, and design briefs for anything substantial
+- `sentinel-notes/` — audit findings, and a `TODO.md` kept deliberately brief: one line per item, with anything needing more detail (a rule with many violations, reasoning behind a decision) split into its own linked design-brief file instead of bloating the list
 - `scratch/` — a gitignored, project-local spot for throwaway verification scripts, so permission rules can actually target a stable path
 - `INTEGRATION_CHECKLIST.md` — the touchpoint checklist and gate-check description
 - A `sentinel-exceptions` file — the documented, owned, expiring exceptions a gate check can accept instead of blocking forever or silently passing. For one-off cases that don't need a standing exception (a single commit that's legitimately large, say), the gate check also accepts a `Sentinel-Override: <reason>` commit trailer — a deliberate, per-commit acknowledgment you write yourself, not a bypass that skips the check silently.
