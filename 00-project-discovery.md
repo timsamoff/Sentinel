@@ -45,3 +45,5 @@ Produce `PROJECT_PROFILE.md` at the project root containing every value gathered
 End with a short "how to use this" note: when running the Design & Code Quality Audit or Integration Audit prompts, replace their `[PROJECT-SPECIFIC]` brackets using the corresponding values above rather than guessing fresh.
 
 Before treating this as complete, verify every field above has an actual value or an explicit "not found / ambiguous, needs user input" note — a blank field is not the same as a checked-and-empty one, and shouldn't be presented as if it were.
+
+If git is in use, this run leaves `PROJECT_PROFILE.md` as a new, untracked file. Don't leave that silently uncommitted — ask plainly whether the user wants it committed now (and pushed, if that fits how they work), rather than assuming they'll notice and handle it later. Never commit or push without an explicit yes.
