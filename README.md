@@ -1,5 +1,7 @@
 # Sentinel
 
+***Rigorous, repeatable quality gates for any Claude Code project, in any language.***
+
 Four Claude Code prompts that add a rigorous, repeatable quality and integration-completeness process to any code or design-based project — discovering what the project actually is, auditing its code and design quality, auditing what future changes need to touch, and then building and wiring in the automated checks that hold all of it in place going forward. Run in order; each one produces artifacts the next one reads.
 
 This is closer to a guided setup process than a one-shot audit. Along the way, Claude Code will ask you directly for preferences — commit message style, whether project docs stay local or get shared with a team, comment philosophy — and those answers become permanent, enforced parts of your project's tooling once the last prompt builds the actual gate check. Treat the questions as real decisions, not incidental prompts to click through.
