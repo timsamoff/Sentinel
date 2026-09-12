@@ -2,7 +2,7 @@
 
 This one produces a report and recommendations, not a checklist gate — quality is a judgment call, not a pass/fail. Some findings from this pass may turn into new gate-check items later (e.g. "no new hardcoded hex colors"), but that decision comes after review, not automatically.
 
-Fill in `[PROJECT-SPECIFIC]` brackets before handing this to CC.
+Fill in `[PROJECT-SPECIFIC]` brackets before handing this to Claude Code.
 
 **Pre-flight — confirm every bracket below is filled in before running this:**
 - [ ] Part 0: the design-tokens/theme-config file guess
@@ -161,7 +161,7 @@ Report what you changed (roughly how many comments removed/rewritten and in whic
 
 ### Part 10 — Documentation currency: CLAUDE.md and README
 
-`CLAUDE.md`, not the README, is this project's authoritative internal record of its features, conventions, and architecture — it's what future CC sessions rely on for accurate context, so drift there is the higher-priority finding. Assess whether `CLAUDE.md`'s description of the project still matches the actual current codebase — not just whether it documents new features (an ongoing version of that is the gate check the Integration Audit sets up for future commits; this is the one-time backward check of what's already drifted), but whether everything it currently claims is still true. Flag anything stale, missing, or contradicted by what you found elsewhere in this audit.
+`CLAUDE.md`, not the README, is this project's authoritative internal record of its features, conventions, and architecture — it's what future Claude Code sessions rely on for accurate context, so drift there is the higher-priority finding. Assess whether `CLAUDE.md`'s description of the project still matches the actual current codebase — not just whether it documents new features (an ongoing version of that is the gate check the Integration Audit sets up for future commits; this is the one-time backward check of what's already drifted), but whether everything it currently claims is still true. Flag anything stale, missing, or contradicted by what you found elsewhere in this audit.
 
 The README serves a different purpose: it's the public-facing description of the project, and its job is to stay accurate, not to be the authoritative internal source. Assess it separately for currency — features described that no longer work as described or have changed shape, setup/install instructions that no longer match what's actually required, and any structural claims (folder layout, supported surfaces, tech stack) that have drifted from reality.
 
