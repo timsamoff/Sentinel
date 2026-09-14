@@ -1,6 +1,8 @@
 # Sentinel: Project Discovery Prompt (Portable — run first, before 01)
 
-Run this once, before the Design & Code Quality Audit. It's read-only against your codebase except for producing one file (`PROJECT_PROFILE.md`) — it detects what it reasonably can, asks you directly for what it can't, and hands the result to the two other prompts that have `[PROJECT-SPECIFIC]` brackets (Design & Code Quality Audit and Integration Audit) so those brackets don't have to be filled in by hand. The Gate-Check Implementation prompt has no brackets of its own, but can still reuse this profile's "existing automation" finding instead of re-detecting it from scratch. Re-run this if the project changes significantly (new surface added, major restructure) rather than trusting a stale profile.
+**Version 1.0**
+
+Run this once, before the Design & Code Quality Audit. It's read-only against your codebase except for producing one file (`PROJECT_PROFILE.md`) — it detects what it reasonably can, asks you directly for what it can't, and hands the result to the two other prompts that have `[PROJECT-SPECIFIC]` brackets (Design & Code Quality Audit and Integration Audit) so those brackets don't have to be filled in by hand. The Gate-Check Implementation prompt has no brackets of its own, but can still reuse this profile's "existing automation" finding instead of re-detecting it from scratch. Re-run this if the project changes significantly (new surface added, major restructure), or if you've updated to a newer version of these prompts — see the update-detection note below — rather than trusting a stale profile.
 
 ---
 
@@ -14,6 +16,15 @@ If you notice something incidental and out-of-scope for this discovery pass whil
 
 When you ask the user anything, phrase it in plain language a non-specialist could follow. Say what's actually being decided before naming any internal mechanism, file, or convention involved — the person commissioned this process, they shouldn't need to already track its internal workings to answer a question about their own project.
 
+### Part 0 — Detect a fresh run vs. an update run
+
+Before anything else, check whether `PROJECT_PROFILE.md` already exists. If it doesn't, this is a fresh run — proceed normally. If it does, this is an update run, and it needs different handling than a fresh run, not just a silent overwrite:
+
+- Compare the version recorded in the existing `PROJECT_PROFILE.md` against this prompt's own version (above). If the existing file has no version recorded at all, treat it as pre-1.0 — older than this versioning system, and the one case that needs the most thorough re-check rather than an incremental diff.
+- Check for known renamed conventions from older versions (e.g. a `production_notes/` folder, the pre-1.0 name for what's now `sentinel-notes/`) and flag it for the user rather than silently ignoring it as an unrelated folder or silently treating it as already migrated.
+- Record in `PROJECT_PROFILE.md` that this was an update run, from which version, and flag explicitly for the Gate-Check Implementation prompt that any existing gate-check hook needs re-validation against the *current* version's requirements, not just left as-is — a hook built under an older version of these prompts can carry bugs that were already found and fixed in the prompt text but never reached the actual file. This is the highest-priority thing an update carries forward; don't let it get lost in the profile as just another field.
+- Don't re-ask questions whose answers are still recorded and still valid (the project name, the design/token file, the recurring unit of work) — only re-run Part 2's questions for things that are genuinely likely to have changed, or that the user wants to revisit.
+
 ### Part 1 — Detect from the codebase
 
 - **Tech stack**: primary language(s), frameworks, and package manager/dependency manifest present (`package.json`, `pyproject.toml`, `Cargo.toml`, `go.mod`, `*.csproj`, `Gemfile`, `composer.json`, `build.gradle`, `Package.swift`, or equivalent).
@@ -23,7 +34,7 @@ When you ask the user anything, phrase it in plain language a non-specialist cou
 - **Recurring unit of work**: infer the closest analog to "the thing that gets added to this project" — a component, an API endpoint, a screen, a model field, a CLI subcommand. This maps to the bracket on line 1 of the Integration Audit's "The prompt" section and Part 1/Part 2's brackets there.
 - **VCS status**: confirm this is a git repository (or note if not); commit count; number of distinct commit authors; whether an established commit-message convention is already in use (Conventional Commits prefixes, a consistent subject-length pattern, whether bodies are typically used) — if a real pattern already exists, note it explicitly so the Integration Audit's Part 4 can propose matching it instead of asking the user cold.
 - **Version/release status**: a version field from a manifest file if present, and whether git tags/releases exist — note whether this reads as pre-release/experimental or an established public project.
-- **Existing automation**: any git hooks, CI config, npm/package scripts, or a pre-commit framework already in place.
+- **Existing automation**: any git hooks, CI config, npm/package scripts, or a pre-commit framework already in place. If any of it looks like an existing gate-check/quality-enforcement system (not just generic build tooling), note it specifically — the Integration Audit reads its actual logic rather than just its presence, and later prompts will ask whether the user wants new checks to match its style or use Sentinel's own conventions.
 - **Existing docs and scaffolding**: whether `AGENTS.md`, `README`, `LICENSE`, `.gitignore`, `sentinel-notes/`, and `scratch/` already exist, noted but not read in full here — the other prompts handle reading their actual content and won't recreate what's already there.
 - **Existing design documentation**: check common conventions for a software/technical design document — `docs/DESIGN.md`, `docs/ARCHITECTURE.md`, a `docs/adr/` directory of individual decision records, or a doc linked from the README. If one exists, note its path — the Design & Code Quality Audit uses it as grounding for checking whether the actual implementation still matches documented intent, which is a different question from internal consistency.
 
@@ -45,7 +56,8 @@ Produce `PROJECT_PROFILE.md` at the project root containing every value gathered
 - Recurring unit of work (the phrase for the Integration Audit's brackets)
 - VCS status, commit/contributor counts, and any detected commit-message convention
 - Version/release status
-- Existing automation detected
+- Existing automation detected, and whether it looks like a pre-existing gate-check system specifically
+- Sentinel version (1.0), and whether this was a fresh run or an update run — if an update, from which prior version, and whether an existing gate-check hook needs re-validation as a result
 - Which of AGENTS.md / README / LICENSE / .gitignore / sentinel-notes/ / scratch/ already exist
 - Path to an existing design document, if one was found (or "none found")
 - A "flagged for follow-up" section listing anything incidental and out-of-scope noticed during discovery (per the note above), so it isn't lost before `TODO.md` exists to hold it properly

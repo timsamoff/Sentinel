@@ -1,6 +1,10 @@
 # Sentinel: Integration Audit Prompt (Portable — for any AI coding agent, any project)
 
+**Version 1.0**
+
 Paste this to your AI coding agent as its own session/task, separate from feature work. Before using it on a new project, fill in the `[PROJECT-SPECIFIC]` bracket below with that project's real subsystems — this template deliberately leaves it unfilled rather than guessing for you. If you skip this, the agent will typically infer something reasonable from the actual codebase, but a value you've deliberately confirmed is more reliable than one inferred in the moment with nobody reviewing it (see note at the end).
+
+**Assumes git only as the default trigger mechanism, not exclusively.** Part 4's commit conventions and Part 2's gate-check triggers assume git by default, but if this project uses a different VCS with its own real, comparable trigger mechanism (Perforce's triggers are the common case in game development specifically), treat that the same way git hooks are treated throughout this prompt, not as a fallback to a generic "no VCS" manual-command path — that fallback is for projects with no VCS-level trigger mechanism at all, not just ones that aren't git.
 
 **Pre-flight — confirm every bracket below is filled in before running this:**
 - [ ] Line 1 of "The prompt": the recurring unit-of-work phrase (e.g. component type, endpoint, screen, model field)
@@ -32,9 +36,15 @@ Carry this per-surface breakdown through every part below — checklist items sh
 
 Before building anything new, inventory the gate checks, CI steps, and AGENTS.md instructions that already exist. For each one, note what it actually verifies — read its logic, don't infer from its name or comments — and what it does not. Do not assume a blank slate.
 
+If an existing check looks like a genuine gate-check/quality-enforcement system rather than generic build tooling, give it the same scrutiny this whole suite applies to checks it builds itself — check its actual logic against the known blind spots this project has repeatedly found in practice: does it read staged content or the working tree if it's a git hook; does a numeric cap (a length limit, a count limit) actually enforce the structure it's meant to be a proxy for, or can that structure be recreated while staying under the cap; does it fail loudly or silently swallow an error into a false pass; does an exclusion apply per-rule or has it been blanket-applied across rules it was never justified for; is its own hook source tracked in the repo, or dropped directly into an untracked location like `.git/hooks/` where it can silently stop existing on a fresh clone. Flag anything found the same way any other finding gets flagged — this doesn't get fixed here (that's the Gate-Check Implementation prompt's job if the user wants it fixed), but it needs surfacing now rather than being trusted just because it already exists and the project's own team built it.
+
+Ask the user directly whether new checks should match this existing system's naming/style/format conventions, or use Sentinel's own conventions (`sentinel-exceptions.json`, the `Sentinel-Override` trailer, etc.) even if that means two styles coexisting in the same project. There's no default here — a project with an established house style may reasonably want new checks blending in rather than announcing themselves as Sentinel's; record the answer for the Gate-Check Implementation prompt to follow.
+
 Also check for `./sentinel-notes/TODO.md` and any `[issue]-design-brief.md` files from a prior design-quality audit pass. If present, read the "candidate gate-check items" it flagged and fold any still-relevant ones into the Part 1 touchpoint list and Part 3 checklist, rather than starting Part 1 from scratch as if no prior audit happened.
 
 If `PROJECT_PROFILE.md` records a design document (`docs/DESIGN.md`, `docs/ARCHITECTURE.md`, or similar), read it too — a documented intended architecture is a useful cross-check when identifying the recurring unit of work and its real touchpoints, in addition to (not instead of) grounding everything in what actually happened in the codebase's own history.
+
+If `PROJECT_PROFILE.md` records that this is an update run (a newer version of these prompts than whatever last touched this project), treat any existing Sentinel-built gate-check hook with the same scrutiny as a third-party pre-existing system above — a hook built under an older version can carry bugs that were already found and fixed in the current prompt text but never reached the actual file. Flag it for re-validation in the Gate-Check Implementation prompt rather than assuming it's still correct just because Sentinel built it.
 
 As you build the Part 1 touchpoint list and the Part 2 AGENTS.md, README, and design-doc requirements, cross-reference every item against this existing-checks inventory and mark it one of:
 
