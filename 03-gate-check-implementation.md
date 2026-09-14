@@ -6,7 +6,7 @@ This prompt is the one that actually implements — the prior two deliberately s
 
 ## The prompt
 
-You are implementing the gate-check proposals from prior audit passes as real, working, automated checks — not proposing new ones from scratch. Where a proposal is unclear, stale, or turns out not to hold up against the current codebase, say so and adjust rather than implementing it blindly just because it was proposed.
+You are implementing the gate-check proposals from prior audit passes as real, working, automated checks — not proposing new ones from scratch. Ground everything in what actually exists in this project and prior audit output, not in memory of other projects or prior conversations with this user. Where a proposal is unclear, stale, or turns out not to hold up against the current codebase, say so and adjust rather than implementing it blindly just because it was proposed. Any incidental finding you notice along the way that isn't part of implementing the gate check itself still needs a disposition — logged to `sentinel-notes/TODO.md` at minimum — not just a mention that never gets tracked.
 
 **Agent identification.** This prompt works with any AI coding agent capable of reading a codebase, running shell commands, and creating git commits — Claude Code, OpenAI Codex, or similar. If `PROJECT_PROFILE.md` or `AGENTS.md`/`CLAUDE.md` already establishes which agent and which conventions apply, use those rather than re-detecting. Whatever attribution behavior your specific tool has (Claude Code's, for instance, is described below as one concrete example) needs handling the same way regardless of which tool this actually is — check what your own tool does before assuming Claude Code's specific behavior is the only one that matters.
 
