@@ -44,6 +44,8 @@ The copy-paste route guarantees the agent only sees the actual instructions; poi
 
 Running a newer version of these prompts against a project Sentinel already touched is a real "update" mode, not just a re-run. Prompt 0 detects whether `PROJECT_PROFILE.md` already exists and compares its recorded version against the current one. On an update, it flags known renamed conventions from older versions, and — the important part — tells prompt 3 to re-validate any existing gate-check hook against the current version's requirements. A hook built under an older version can carry bugs that were already fixed in the prompt text but never reached the actual file, so an update isn't complete until that hook has been re-checked, not just left as-is.
 
+**Which prompts you actually need to re-run depends on what changed, not a fixed shortcut.** Running `0` then jumping straight to `3` is correct *only when the update is scoped to gate-check implementation details* — `3` re-validates existing proposals against the current codebase regardless of when `1`/`2` last ran, so a hook-specific fix doesn't need them re-run. But `3` only implements what's already proposed in `INTEGRATION_CHECKLIST.md` — if the update added a new *design-audit* check, only re-running `1` surfaces those new findings; if it added a new *integration-audit* gate category, only re-running `2` gets it into the checklist for `3` to implement. `3` can't implement a gate category `2` never proposed, and it can't surface a design finding `1` never looked for. Know what actually changed in the version you're upgrading to before deciding which of `1`/`2`/`3` to skip.
+
 ## What you end up with
 
 - `PROJECT_PROFILE.md` — discovered/confirmed project context, including agent and tool-specific conventions.
