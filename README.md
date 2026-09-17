@@ -4,18 +4,30 @@
 
 ***Rigorous, repeatable quality gates for any AI coding agent, any project, any language.***
 
-Four prompts that add a rigorous, repeatable quality and integration-completeness process to any code or design-based project: discover what the project actually is, audit its code and design quality, audit what future changes need to touch, then build and wire in the automated checks that hold it all in place. Run in order; each one produces artifacts the next one reads.
+**Contents:** [What's here](#whats-here) · [Order matters, but isn't rigid](#order-matters-but-isnt-rigid) · [How to use these](#how-to-use-these) · [Before you start](#before-you-start) · [Upgrading to a new version](#upgrading-to-a-new-version-of-sentinel) · [What you end up with](#what-you-end-up-with) · [Limitations](#limitations) · [License](#license)
 
-This is closer to a guided setup process than a one-shot audit. Your agent will ask you directly for preferences along the way (commit style, whether docs stay local or shared, comment philosophy), and those answers become permanent, enforced parts of your project's tooling once prompt 3 builds the gate check. Treat the questions as real decisions, not prompts to click through.
+### What it does
+
+Four prompts that add a rigorous, repeatable quality and integration-completeness process to any code or design-based project: discover what the project actually is, audit its code and design quality, audit what future changes need to touch, then build and wire in the automated checks that hold it all in place. Run in order; each one produces artifacts the next one reads. A thin orchestrator (`sentinel-init.md`) can run all four in sequence for you — see [How to use these](#how-to-use-these) — but it doesn't skip or soften any of their individual confirmation points.
+
+### A guided setup, not a one-shot audit
+
+Your agent will ask you directly for preferences along the way (commit style, whether docs stay local or shared, comment philosophy), and those answers become permanent, enforced parts of your project's tooling once prompt 3 builds the gate check. Treat the questions as real decisions, not prompts to click through.
+
+### Front-loaded cost, cheap to run after
+
+Setup is the expensive part: prompts 0-3 read your actual codebase and history to ground every decision, which costs real time and tokens once. What comes out the other end is a diff-scoped pre-commit hook plus a periodic full-repo scan — ordinary commits are checked against a small, targeted diff, not re-audited against the whole project every time. You pay the audit cost once, deliberately, in exchange for enforcement that stays cheap on every commit after.
 
 **Requires an AI coding agent with file-system and shell access, initialized in the project.** Confirmed compatible with Claude Code and OpenAI Codex; likely compatible with similar tools (Cursor, Gemini CLI, Windsurf, GitHub Copilot), since each prompt identifies which tool it's running under and adapts accordingly rather than assuming one product. Two things vary by tool and get auto-detected: the persistent context file (`AGENTS.md` for most tools, `CLAUDE.md` for Claude Code) and the permission/config mechanism (`.claude/settings.json` for Claude Code, `~/.codex/config.toml` + `/permissions` for Codex). Start your agent from the project's own directory before running any of these.
 
 ## What's here
 
-0. **`00-project-discovery.md`** — Run first. Detects what it can (tech stack, surfaces, commit conventions, a design-token guess) and asks directly for what it can't, starting with the project's name. Produces `PROJECT_PROFILE.md`, which fills prompts 1 and 2's `[PROJECT-SPECIFIC]` brackets for you.
+0. **`00-project-discovery.md`** — Run first. Detects what it can (tech stack, surfaces, commit conventions, a design-token guess) and asks directly for what it can't, starting with the project's name. Produces `PROJECT_PROFILE.md`, which fills prompts 1 and 2's `[PROJECT-SPECIFIC]` brackets for you. On a genuinely blank or near-empty project, it switches from inference to direct elicitation instead — see its Part 0a.
 1. **`01-design-quality-audit.md`** — Code quality and (for web UI) design consistency: single source of truth for colors/spacing, responsive design, accessibility, whether the interface reads as generic/AI-generated. Also checks or offers to create a design document. Produces a report plus some low-risk direct cleanup (stale comments, doc setup). Report-only otherwise.
 2. **`02-integration-audit.md`** — Audits project history for every place a new feature has ever needed to touch, including places missed the first time. Produces `INTEGRATION_CHECKLIST.md`: a checklist plus a gate-check description. Proposes, doesn't implement.
-3. **`03-gate-check-implementation.md`** — Takes the proposals from 01 and 02, re-validates them against the current codebase, and actually builds and wires in the automated pre-commit checks. The only one of the four that implements.
+3. **`03-gate-check-implementation.md`** — Takes the proposals from 01 and 02, re-validates them against the current codebase, and actually builds and wires in the automated pre-commit checks. The only one of the four that implements. Closes with a plain completion summary the first time the full sequence finishes for a project.
+
+Also here: **`sentinel-init.md`** — a thin orchestrator that runs 0 → 1 → 2 → 3 in sequence for you, stopping at each stage's own confirmation points exactly as if you'd pasted them one at a time. Optional; the four numbered prompts work the same with or without it.
 
 ## Order matters, but isn't rigid
 
@@ -25,6 +37,7 @@ Run 0 → 1 → 2 → 3 for the best result — each one reads artifacts the pre
 
 - **Copy-paste.** Copy the whole file into a session in your project's directory. Simpler than trimming it, and nothing here is harmful for the agent to see.
 - **Point the agent at the file.** Place these files in your project and ask directly: "read `00-project-discovery.md` and run it." Most agents can read and follow it the same way.
+- **Run the orchestrator.** Point the agent at `sentinel-init.md` instead to have it run 0 → 1 → 2 → 3 in sequence on its own, still stopping at each stage's normal confirmation points. Good for a first-time run through the whole suite; run the numbered prompts individually if you want to stop and review between stages yourself, or only need one or two of them.
 
 The copy-paste route guarantees the agent only sees the actual instructions; pointing at the file is faster for running several back to back.
 
