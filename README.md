@@ -4,7 +4,16 @@
 
 ***Rigorous, repeatable quality gates for any AI coding agent, any project, any language.***
 
-**Contents:** [What's here](#whats-here) · [Order matters, but isn't rigid](#order-matters-but-isnt-rigid) · [How to use these](#how-to-use-these) · [Before you start](#before-you-start) · [Upgrading to a new version](#upgrading-to-a-new-version-of-sentinel) · [What you end up with](#what-you-end-up-with) · [Limitations](#limitations) · [License](#license)
+**Contents**
+
+- [What's here](#whats-here)
+- [Order matters, but isn't rigid](#order-matters-but-isnt-rigid)
+- [How to use these](#how-to-use-these)
+- [Before you start](#before-you-start)
+- [Upgrading to a new version](#upgrading-to-a-new-version-of-sentinel)
+- [What you end up with](#what-you-end-up-with)
+- [Limitations](#limitations)
+- [License](#license)
 
 ### What it does
 
