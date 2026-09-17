@@ -7,8 +7,6 @@
 ### Contents
 
 - [What it does](#what-it-does)
-- [A guided setup, not a one-shot audit](#a-guided-setup-not-a-one-shot-audit)
-- [Front-loaded cost, cheap to run after](#front-loaded-cost-cheap-to-run-after)
 - [What's here](#whats-here)
 - [Order matters, but isn't rigid](#order-matters-but-isnt-rigid)
 - [How to use these](#how-to-use-these)
@@ -22,11 +20,11 @@
 
 Four prompts that add a rigorous, repeatable quality and integration-completeness process to any code or design-based project: discover what the project actually is, audit its code and design quality, audit what future changes need to touch, then build and wire in the automated checks that hold it all in place. Run in order; each one produces artifacts the next one reads. A thin orchestrator (`sentinel-init.md`) can run all four in sequence for you — see [How to use these](#how-to-use-these) — but it doesn't skip or soften any of their individual confirmation points.
 
-## A guided setup, not a one-shot audit
+### A guided setup, not a one-shot audit
 
 Your agent will ask you directly for preferences along the way (commit style, whether docs stay local or shared, comment philosophy), and those answers become permanent, enforced parts of your project's tooling once prompt 3 builds the gate check. Treat the questions as real decisions, not prompts to click through.
 
-## Front-loaded cost, cheap to run after
+### Front-loaded cost, cheap to run after
 
 Setup is the expensive part: prompts 0-3 read your actual codebase and history to ground every decision, which costs real time and tokens once. What comes out the other end is a diff-scoped pre-commit hook plus a periodic full-repo scan — ordinary commits are checked against a small, targeted diff, not re-audited against the whole project every time. You pay the audit cost once, deliberately, in exchange for enforcement that stays cheap on every commit after.
 
