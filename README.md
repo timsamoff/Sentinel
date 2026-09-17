@@ -37,7 +37,7 @@ Setup is the expensive part: prompts 0-3 read your actual codebase and history t
 2. **`02-integration-audit.md`** — Audits project history for every place a new feature has ever needed to touch, including places missed the first time. Produces `INTEGRATION_CHECKLIST.md`: a checklist plus a gate-check description. Proposes, doesn't implement.
 3. **`03-gate-check-implementation.md`** — Takes the proposals from 01 and 02, re-validates them against the current codebase, and actually builds and wires in the automated pre-commit checks. The only one of the four that implements. Closes with a plain completion summary the first time the full sequence finishes for a project.
 
-Also here: **`sentinel-init.md`** — a thin orchestrator that runs 0 → 1 → 2 → 3 in sequence for you, stopping at each stage's own confirmation points exactly as if you'd pasted them one at a time. Optional; the four numbered prompts work the same with or without it.
+**`sentinel-init.md`** — a thin orchestrator that runs 0 → 1 → 2 → 3 in sequence for you, stopping at each stage's own confirmation points exactly as if you'd pasted them one at a time. The recommended way to run the suite — see [How to use these](#how-to-use-these). The four numbered prompts above are real, independent entry points in their own right, not just internals of this wrapper.
 
 ## Order matters, but isn't rigid
 
@@ -45,11 +45,11 @@ Run 0 → 1 → 2 → 3 for the best result — each one reads artifacts the pre
 
 ## How to use these
 
-- **Copy-paste.** Copy the whole file into a session in your project's directory. Simpler than trimming it, and nothing here is harmful for the agent to see.
-- **Point the agent at the file.** Place these files in your project and ask directly: "read `00-project-discovery.md` and run it." Most agents can read and follow it the same way.
-- **Run the orchestrator.** Point the agent at `sentinel-init.md` instead to have it run 0 → 1 → 2 → 3 in sequence on its own, still stopping at each stage's normal confirmation points. Good for a first-time run through the whole suite; run the numbered prompts individually if you want to stop and review between stages yourself, or only need one or two of them.
+- **Run the orchestrator (recommended).** Point the agent at `sentinel-init.md` to have it run 0 → 1 → 2 → 3 in sequence on its own, still stopping at each stage's normal confirmation points exactly as if you'd run them one at a time. The easiest way through the whole suite, especially the first time.
+- **Copy-paste a single prompt.** Copy the whole file into a session in your project's directory. Simpler than trimming it, and nothing here is harmful for the agent to see.
+- **Point the agent at a single file.** Place these files in your project and ask directly: "read `00-project-discovery.md` and run it." Most agents can read and follow it the same way.
 
-The copy-paste route guarantees the agent only sees the actual instructions; pointing at the file is faster for running several back to back.
+Reach for the individual prompts instead of the orchestrator when you want to stop and review between stages yourself, only need one or two of them, or are re-running just what an update actually changed (see [Upgrading to a new version](#upgrading-to-a-new-version-of-sentinel)) — the numbered prompts are real, independent entry points, not just internals of the orchestrator. The copy-paste route also guarantees the agent only sees the actual instructions for that one stage, if that matters to you.
 
 ## Before you start
 
