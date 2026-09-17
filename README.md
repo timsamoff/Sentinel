@@ -6,6 +6,7 @@
 
 **Contents**
 
+- [What it does](#what-it-does)
 - [What's here](#whats-here)
 - [Order matters, but isn't rigid](#order-matters-but-isnt-rigid)
 - [How to use these](#how-to-use-these)
