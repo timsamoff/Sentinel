@@ -4,7 +4,7 @@
 
 ***Rigorous, repeatable quality gates for any AI coding agent, any project, any language.***
 
-**Contents**
+### Contents
 
 - [What it does](#what-it-does)
 - [What's here](#whats-here)
