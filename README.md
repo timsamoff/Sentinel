@@ -32,12 +32,12 @@ Setup is the expensive part: prompts 0-3 read your actual codebase and history t
 
 ## What's here
 
+**`sentinel-init.md`** — a thin orchestrator that runs 0 → 1 → 2 → 3 in sequence for you, stopping at each stage's own confirmation points exactly as if you'd pasted them one at a time. The recommended way to run the suite — see [How to use these](#how-to-use-these). Deliberately unnumbered: it isn't a fifth stage, it's a wrapper around the four below, which remain real, independent entry points in their own right.
+
 0. **`00-project-discovery.md`** — Run first. Detects what it can (tech stack, surfaces, commit conventions, a design-token guess) and asks directly for what it can't, starting with the project's name. Produces `PROJECT_PROFILE.md`, which fills prompts 1 and 2's `[PROJECT-SPECIFIC]` brackets for you. On a genuinely blank or near-empty project, it switches from inference to direct elicitation instead — see its Part 0a.
 1. **`01-design-quality-audit.md`** — Code quality and (for web UI) design consistency: single source of truth for colors/spacing, responsive design, accessibility, whether the interface reads as generic/AI-generated. Also checks or offers to create a design document. Produces a report plus some low-risk direct cleanup (stale comments, doc setup). Report-only otherwise.
 2. **`02-integration-audit.md`** — Audits project history for every place a new feature has ever needed to touch, including places missed the first time. Produces `INTEGRATION_CHECKLIST.md`: a checklist plus a gate-check description. Proposes, doesn't implement.
 3. **`03-gate-check-implementation.md`** — Takes the proposals from 01 and 02, re-validates them against the current codebase, and actually builds and wires in the automated pre-commit checks. The only one of the four that implements. Closes with a plain completion summary the first time the full sequence finishes for a project.
-
-**`sentinel-init.md`** — a thin orchestrator that runs 0 → 1 → 2 → 3 in sequence for you, stopping at each stage's own confirmation points exactly as if you'd pasted them one at a time. The recommended way to run the suite — see [How to use these](#how-to-use-these). The four numbered prompts above are real, independent entry points in their own right, not just internals of this wrapper.
 
 ## Order matters, but isn't rigid
 
