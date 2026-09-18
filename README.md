@@ -63,6 +63,8 @@ Reach for the individual prompts instead of the orchestrator when you want to st
 - **Prompt 3 asks, once, how much commit/push autonomy you want.** Confirm every time (default), auto-commit but confirm before push, or fully automatic — recorded in `AGENTS.md` as a standing preference. If a project starts committing on its own without you having chosen this, that's not Sentinel's doing.
 - **Prompt 1's design sections adapt to your domain.** Full visual GUI (web, mobile, desktop, game) gets the full treatment; a presentational-but-not-GUI surface (a CLI's color scheme, a document generator) gets most sections translated, minus the purely visual ones; no presentational dimension at all (a backend service, a library) means only the code-quality section applies.
 - **The design-doc writing voice searches broadly**, checking both the project and your agent's own global config/memory location for anything matching style/voice/tone/narrative/writing in the name — not one exact expected filename.
+- **The backlog doesn't go quiet just because you asked for something else.** If your agent gets pulled onto an unrelated task mid-session and finishes it, it should mention any untouched `TODO.md` items before ending its response — a brief nudge, not the full recommendation ritual repeated every time.
+- **Added something new with no precedent in the project? You don't need a full re-run of prompt 0 just to find out what applies.** Name the specific thing you added and ask what covers it — this is a lighter, narrower mode than a full update run, and just maps your addition to the right prompt and part directly.
 
 ## Upgrading to a new version of Sentinel
 
@@ -83,6 +85,7 @@ Running a newer version of these prompts against a project Sentinel already touc
 - A `sentinel-exceptions` file — documented, owned, expiring exceptions a gate check can accept instead of blocking or silently passing. For one-off cases, a `Sentinel-Override: <reason>` commit trailer works instead — a deliberate acknowledgment, not a silent bypass.
 - A `TODO.md` sync check — a hard gate for items linked to a design brief, a non-blocking reminder for plain items with no structural signal to check.
 - An actual pre-commit hook (source kept in a tracked, versioned location, not dropped untracked into `.git/hooks/`, which silently stops existing on a fresh clone) plus a full-repo scan mode for drift the incremental hook can't see, triggered via CI schedule or `pre-push` rather than run on every commit.
+- A new-file-category check, built as a standard default rather than something prompt 2 has to propose first — flags the first time a file extension no one's added before shows up (the first image, the first 3D model, whatever), and asks a short question set right there to route it to prompt 1's creative-media check or prompt 2's touchpoint categories, instead of leaving you to guess what to ask for.
 
 ## Limitations
 
