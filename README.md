@@ -28,16 +28,20 @@ Your agent will ask you directly for preferences along the way (commit style, wh
 
 Setup is the expensive part: prompts 0-3 read your actual codebase and history to ground every decision, which costs real time and tokens once. What comes out the other end is a diff-scoped pre-commit hook plus a periodic full-repo scan — ordinary commits are checked against a small, targeted diff, not re-audited against the whole project every time. You pay the audit cost once, deliberately, in exchange for enforcement that stays cheap on every commit after.
 
-**Requires an AI coding agent with file-system and shell access, initialized in the project.** Confirmed compatible with Claude Code and OpenAI Codex; likely compatible with similar tools (Cursor, Gemini CLI, Windsurf, GitHub Copilot), since each prompt identifies which tool it's running under and adapts accordingly rather than assuming one product. Two things vary by tool and get auto-detected: the persistent context file (`AGENTS.md` for most tools, `CLAUDE.md` for Claude Code) and the permission/config mechanism (`.claude/settings.json` for Claude Code, `~/.codex/config.toml` + `/permissions` for Codex). Start your agent from the project's own directory before running any of these.
+**Requires an AI coding agent with file-system and shell access, initialized in the project.** Confirmed compatible with Claude Code and OpenAI Codex; likely compatible with similar tools (Cursor, Gemini CLI, Windsurf, GitHub Copilot), since each prompt identifies which tool it's running under and adapts accordingly rather than assuming one product. Two things vary by tool and get auto-detected: the persistent context file (`AGENTS.md` for most tools, `CLAUDE.md` for Claude Code) and the permission/config mechanism (`.claude/settings.json` for Claude Code, `~/.codex/config.toml` + `/permissions` for Codex).
+
+**This repo is a source to copy from, not a place to work.** The actual prompt files live in the `Sentinel-Prompts/` folder — copy that whole folder into your own project (anywhere in it; the prompts don't care where they sit), then start your agent from your project's own root directory, not from inside `Sentinel-Prompts/`. Everything the prompts produce (`PROJECT_PROFILE.md`, `AGENTS.md`, `sentinel-notes/`, the gate-check hook, all of it) lands in your project's root the same as if you'd typed the prompts in yourself — `Sentinel-Prompts/` is just the delivery container for the instructions, not a workspace of its own.
 
 ## What's here
 
-**`sentinel-init.md`** — a thin orchestrator that runs 0 → 1 → 2 → 3 in sequence for you, stopping at each stage's own confirmation points exactly as if you'd pasted them one at a time. The recommended way to run the suite — see [How to use these](#how-to-use-these). Deliberately unnumbered: it isn't a fifth stage, it's a wrapper around the four below, which remain real, independent entry points in their own right.
+Everything below lives inside `Sentinel-Prompts/` — copy the whole folder, not individual files, so nothing gets left behind.
 
-0. **`00-project-discovery.md`** — Run first. Detects what it can (tech stack, surfaces, commit conventions, a design-token guess) and asks directly for what it can't, starting with the project's name. Produces `PROJECT_PROFILE.md`, which fills prompts 1 and 2's `[PROJECT-SPECIFIC]` brackets for you. On a genuinely blank or near-empty project, it switches from inference to direct elicitation instead — see its Part 0a.
-1. **`01-design-quality-audit.md`** — Code quality and (for web UI) design consistency: single source of truth for colors/spacing, responsive design, accessibility, whether the interface reads as generic/AI-generated. Also checks or offers to create a design document. Produces a report plus some low-risk direct cleanup (stale comments, doc setup). Report-only otherwise.
-2. **`02-integration-audit.md`** — Audits project history for every place a new feature has ever needed to touch, including places missed the first time. Produces `INTEGRATION_CHECKLIST.md`: a checklist plus a gate-check description. Proposes, doesn't implement.
-3. **`03-gate-check-implementation.md`** — Takes the proposals from 01 and 02, re-validates them against the current codebase, and actually builds and wires in the automated pre-commit checks. The only one of the four that implements. Closes with a plain completion summary the first time the full sequence finishes for a project.
+**`Sentinel-Prompts/sentinel-init.md`** — a thin orchestrator that runs 0 → 1 → 2 → 3 in sequence for you, stopping at each stage's own confirmation points exactly as if you'd pasted them one at a time. The recommended way to run the suite — see [How to use these](#how-to-use-these). Deliberately unnumbered: it isn't a fifth stage, it's a wrapper around the four below, which remain real, independent entry points in their own right.
+
+0. **`Sentinel-Prompts/00-project-discovery.md`** — Run first. Detects what it can (tech stack, surfaces, commit conventions, a design-token guess) and asks directly for what it can't, starting with the project's name. Produces `PROJECT_PROFILE.md`, which fills prompts 1 and 2's `[PROJECT-SPECIFIC]` brackets for you. On a genuinely blank or near-empty project, it switches from inference to direct elicitation instead — see its Part 0a.
+1. **`Sentinel-Prompts/01-design-quality-audit.md`** — Code quality and (for web UI) design consistency: single source of truth for colors/spacing, responsive design, accessibility, whether the interface reads as generic/AI-generated. Also checks or offers to create a design document. Produces a report plus some low-risk direct cleanup (stale comments, doc setup). Report-only otherwise.
+2. **`Sentinel-Prompts/02-integration-audit.md`** — Audits project history for every place a new feature has ever needed to touch, including places missed the first time. Produces `INTEGRATION_CHECKLIST.md`: a checklist plus a gate-check description. Proposes, doesn't implement.
+3. **`Sentinel-Prompts/03-gate-check-implementation.md`** — Takes the proposals from 01 and 02, re-validates them against the current codebase, and actually builds and wires in the automated pre-commit checks. The only one of the four that implements. Closes with a plain completion summary the first time the full sequence finishes for a project.
 
 ## Order matters, but isn't rigid
 
@@ -45,9 +49,22 @@ Run 0 → 1 → 2 → 3 for the best result — each one reads artifacts the pre
 
 ## How to use these
 
-- **Run the orchestrator (recommended).** Point the agent at `sentinel-init.md` to have it run 0 → 1 → 2 → 3 in sequence on its own, still stopping at each stage's normal confirmation points exactly as if you'd run them one at a time. The easiest way through the whole suite, especially the first time.
-- **Copy-paste a single prompt.** Copy the whole file into a session in your project's directory. Simpler than trimming it, and nothing here is harmful for the agent to see.
-- **Point the agent at a single file.** Place these files in your project and ask directly: "read `00-project-discovery.md` and run it." Most agents can read and follow it the same way.
+**Get `Sentinel-Prompts/` into your own project first.** GitHub doesn't offer a one-click way to grab a single folder, so pick whichever of these fits:
+
+- **Fastest — pull just the 5 files with one command**, run from your project's root (creates `Sentinel-Prompts/` for you):
+  ```
+  mkdir -p Sentinel-Prompts && cd Sentinel-Prompts && for f in 00-project-discovery.md 01-design-quality-audit.md 02-integration-audit.md 03-gate-check-implementation.md sentinel-init.md; do curl -sO "https://raw.githubusercontent.com/timsamoff/Sentinel/main/Sentinel-Prompts/$f"; done && cd ..
+  ```
+  No git required. (`wget` works the same way if you don't have `curl`: swap `curl -sO` for `wget -q`.)
+- **Or clone the repo and copy the folder out** — `git clone https://github.com/timsamoff/Sentinel.git`, then copy its `Sentinel-Prompts/` folder into your project and delete the rest of the clone.
+
+From there:
+
+- **Run the orchestrator (recommended).** Point the agent at `Sentinel-Prompts/sentinel-init.md` to have it run 0 → 1 → 2 → 3 in sequence on its own, still stopping at each stage's normal confirmation points exactly as if you'd run them one at a time. The easiest way through the whole suite, especially the first time.
+- **Copy-paste a single prompt.** Copy the whole file's contents into a session in your project's directory. Simpler than trimming it, and nothing here is harmful for the agent to see.
+- **Point the agent at a single file.** With the folder already in your project, ask directly: "read `Sentinel-Prompts/00-project-discovery.md` and run it." Most agents can read and follow it the same way.
+
+Either way, start your agent from your project's own root directory, not from inside `Sentinel-Prompts/` — the prompts read and write files relative to your project root (`PROJECT_PROFILE.md`, `AGENTS.md`, `sentinel-notes/`, and so on all land there), not relative to wherever the prompt files themselves happen to sit.
 
 Reach for the individual prompts instead of the orchestrator when you want to stop and review between stages yourself, only need one or two of them, or are re-running just what an update actually changed (see [Upgrading to a new version](#upgrading-to-a-new-version-of-sentinel)) — the numbered prompts are real, independent entry points, not just internals of the orchestrator. The copy-paste route also guarantees the agent only sees the actual instructions for that one stage, if that matters to you.
 
