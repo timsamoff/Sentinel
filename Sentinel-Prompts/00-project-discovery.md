@@ -1,6 +1,6 @@
 # Sentinel: Project Discovery Prompt (Portable — run first, before 01)
 
-**Version 1.0**
+**Version 1.1**
 
 Run this once, before the Design & Code Quality Audit. It's read-only against your codebase except for producing one file (`PROJECT_PROFILE.md`) — it detects what it reasonably can, asks you directly for what it can't, and hands the result to the two other prompts that have `[PROJECT-SPECIFIC]` brackets (Design & Code Quality Audit and Integration Audit) so those brackets don't have to be filled in by hand. The Gate-Check Implementation prompt has no brackets of its own, but can still reuse this profile's "existing automation" finding instead of re-detecting it from scratch. Re-run this if the project changes significantly (new surface added, major restructure), or if you've updated to a newer version of these prompts — see the update-detection note below — rather than trusting a stale profile.
 
@@ -23,7 +23,32 @@ Before anything else, check whether `PROJECT_PROFILE.md` already exists. If it d
 - Compare the version recorded in the existing `PROJECT_PROFILE.md` against this prompt's own version (above). If the existing file has no version recorded at all, treat it as pre-1.0 — older than this versioning system, and the one case that needs the most thorough re-check rather than an incremental diff.
 - Check for known renamed conventions from older versions (e.g. a `production_notes/` folder, the pre-1.0 name for what's now `sentinel-notes/`) and flag it for the user rather than silently ignoring it as an unrelated folder or silently treating it as already migrated.
 - Record in `PROJECT_PROFILE.md` that this was an update run, from which version, and flag explicitly for the Gate-Check Implementation prompt that any existing gate-check hook needs re-validation against the *current* version's requirements, not just left as-is — a hook built under an older version of these prompts can carry bugs that were already found and fixed in the prompt text but never reached the actual file. This is the highest-priority thing an update carries forward; don't let it get lost in the profile as just another field.
+- Use the version history below to work out what actually changed since the recorded version, and recommend re-running only what it names.
 - Don't re-ask questions whose answers are still recorded and still valid (the project name, the design/token file, the recurring unit of work) — only re-run Part 2's questions for things that are genuinely likely to have changed, or that the user wants to revisit.
+
+**Version history, for update runs.** Each entry names where the change lives, what it changes in a project that already ran Sentinel, and how to tell whether the project already has it. Version 1.0 was revised in place for a while before version numbers were bumped consistently, so a project recording 1.0 may already have some of the 1.1 changes. Check each entry against the project's actual `AGENTS.md`, `sentinel-notes/`, and gate check before proposing it; never assume it's missing because the version number is older. Group what you find into the three kinds below, present the list with a proposed action for each, and confirm before applying anything.
+
+- **Standing notes and conventions.** These only add or correct text in `AGENTS.md`. Apply them directly from the named Part, without re-running that whole prompt; a full audit to land one paragraph wastes the user's time.
+- **Gate-check changes.** These change what the hook or manual command should do. They fall under the re-validation flag above: list them for `03`, which re-checks the existing implementation against them.
+- **Run-time only.** These change how the prompts behave while running and leave nothing in the project. Mention them briefly; there's nothing to apply.
+
+*1.1 (changes since 1.0):*
+
+- Standing note — session handoff file and session-start read order (`01`, Part 11). Already present if `AGENTS.md` names a handoff file and says what to read first in a new session.
+- Standing note — terse comments are limited to one or two sentences, with longer explanation moved to `AGENTS.md` (`01`, Part 9). Applies only if the recorded comment philosophy is terse/minimal. Already present if `AGENTS.md` states a sentence limit.
+- Standing note — mention open `TODO.md` items when an unrelated task finishes (`01`, Part 11). Already present if `AGENTS.md` covers the backlog outside the TODO-completion moment.
+- Standing note — "actively recommend" means name the strongest next item and start on it, not list candidates and wait (`01`, Part 11). Applies only if that next-item preference was chosen.
+- Standing note — run the manual check when a `TODO.md` item is completed (`01`, Part 11). Applies only to manual-command projects.
+- Convention — the plain terse commit style means no body, ever (`02`, Part 4). Applies only if plain terse was chosen. If `AGENTS.md` says something like "no body unless truly necessary," correct it.
+- Gate check — plain terse commits get a hard block on any body line (`03`, Part 2). Applies only if plain terse was chosen.
+- Gate check — an optional session-start hook that prints the handoff file into the agent's context, where the tool supports one (`03`, Part 0c). Offered, not built by default. Already present if the tool's settings file has a session-start hook reading the handoff.
+- Gate check — the new-file-category check is built on every run (`03`, Part 0b). Already present if a known-extensions manifest exists.
+- Gate check — a manual command in a project with git checks the most recent commit's message after the fact (`03`, Part 2); a manual command built because there was no VCS checks for git appearing later (`03`, Part 2); a manual command also covers Sentinel output that's gitignored (`03`'s opening notes).
+- Gate check — four design blind spots: exceptions keyed to content, not position; manifest checks in both directions; subsystems naming the same thing differently; coverage complete against the wrong taxonomy (`03`, Part 2).
+- Run-time only — structured choice UI where available; the orchestrator moving between stages on its own; the narrow invocation mode below; blank-project mode (Part 0a).
+- Location — the prompt files now live in a `Sentinel-Prompts/` folder. If older copies sit loose in the project root, flag them as stale duplicates the user may want to delete, the same as a renamed convention.
+
+When this suite's version changes, add a new entry above this one rather than editing the existing entries, so a project several versions behind can read every step it missed.
 
 **A narrow invocation, distinct from a full update run.** Not every reason to reach for this prompt again is "re-survey the whole project" — someone who has already been through the full sequence once may just want to know, about one specific new thing they added ("I added a `media/` folder," "I started using a new file format," "there's a new subsystem now"), which existing part of this suite (if any) actually handles it, without triggering a full Part 1 re-detection pass across the entire codebase. If the user's request reads this way — naming one specific addition and asking what applies, rather than asking for a general re-check — treat it as this narrower mode instead of a full update run: skip Part 1's full re-detection, and instead map just the thing they named to the specific prompt and Part that covers it (e.g. a new binary creative-media type → the Design & Code Quality Audit's Part 7; a new recurring structural unit → the Integration Audit's Part 1 touchpoint categories; a new file extension appearing for the first time, if the Gate-Check Implementation prompt's Part 0b default check is already built for this project → that check will catch it automatically going forward, so say so rather than proposing a redundant manual answer). Give a direct, short answer naming the prompt/Part and briefly why, not a full `PROJECT_PROFILE.md` rewrite. If it turns out the thing they're asking about doesn't cleanly map to any existing part of this suite, say that plainly too, rather than forcing a fit — not everything needs a formal answer from this suite specifically.
 
@@ -73,7 +98,7 @@ Produce `PROJECT_PROFILE.md` at the project root containing every value gathered
 - VCS status, commit/contributor counts, and any detected commit-message convention
 - Version/release status
 - Existing automation detected, and whether it looks like a pre-existing gate-check system specifically
-- Sentinel version (1.0), and whether this was a fresh run or an update run — if an update, from which prior version, and whether an existing gate-check hook needs re-validation as a result
+- Sentinel version (1.1), and whether this was a fresh run or an update run — if an update, from which prior version, and whether an existing gate-check hook needs re-validation as a result
 - Whether this was a blank/near-empty project run (per Part 0a), and which fields were deferred as a result rather than evaluated-and-empty
 - Which of AGENTS.md / README / LICENSE / .gitignore / sentinel-notes/ / scratch/ already exist
 - Path to an existing design document, if one was found (or "none found")
