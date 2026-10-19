@@ -1,6 +1,6 @@
 # Sentinel: Project Discovery Prompt (Portable — run first, before 01)
 
-**Version 1.1**
+**Version 1.2.0**
 
 Run this once, before the Design & Code Quality Audit. It's read-only against your codebase except for producing one file (`PROJECT_PROFILE.md`) — it detects what it reasonably can, asks you directly for what it can't, and hands the result to the two other prompts that have `[PROJECT-SPECIFIC]` brackets (Design & Code Quality Audit and Integration Audit) so those brackets don't have to be filled in by hand. The Gate-Check Implementation prompt has no brackets of its own, but can still reuse this profile's "existing automation" finding instead of re-detecting it from scratch. Re-run this if the project changes significantly (new surface added, major restructure), or if you've updated to a newer version of these prompts — see the update-detection note below — rather than trusting a stale profile.
 
@@ -21,18 +21,26 @@ When you ask the user anything — one of this prompt's own scripted questions o
 Before anything else, check whether `PROJECT_PROFILE.md` already exists. If it doesn't, this is a fresh run — proceed normally. If it does, this is an update run, and it needs different handling than a fresh run, not just a silent overwrite:
 
 - Compare the version recorded in the existing `PROJECT_PROFILE.md` against this prompt's own version (above). If the existing file has no version recorded at all, treat it as pre-1.0 — older than this versioning system, and the one case that needs the most thorough re-check rather than an incremental diff.
-- Check for known renamed conventions from older versions (e.g. a `production_notes/` folder, the pre-1.0 name for what's now `sentinel-notes/`) and flag it for the user rather than silently ignoring it as an unrelated folder or silently treating it as already migrated.
+- Check for known renamed conventions from older versions (e.g. a `production_notes/` folder, the pre-1.0 name for what's now `Sentinel-Notes/`) and flag it for the user rather than silently ignoring it as an unrelated folder or silently treating it as already migrated.
 - Record in `PROJECT_PROFILE.md` that this was an update run, from which version, and flag explicitly for the Gate-Check Implementation prompt that any existing gate-check hook needs re-validation against the *current* version's requirements, not just left as-is — a hook built under an older version of these prompts can carry bugs that were already found and fixed in the prompt text but never reached the actual file. This is the highest-priority thing an update carries forward; don't let it get lost in the profile as just another field.
 - Use the version history below to work out what actually changed since the recorded version, and recommend re-running only what it names.
 - Don't re-ask questions whose answers are still recorded and still valid (the project name, the design/token file, the recurring unit of work) — only re-run Part 2's questions for things that are genuinely likely to have changed, or that the user wants to revisit.
 
-**Version history, for update runs.** Each entry names where the change lives, what it changes in a project that already ran Sentinel, and how to tell whether the project already has it. Version 1.0 was revised in place for a while before version numbers were bumped consistently, so a project recording 1.0 may already have some of the 1.1 changes. Check each entry against the project's actual `AGENTS.md`, `sentinel-notes/`, and gate check before proposing it; never assume it's missing because the version number is older. Group what you find into the three kinds below, present the list with a proposed action for each, and confirm before applying anything.
+**Version history, for update runs.** Each entry names where the change lives, what it changes in a project that already ran Sentinel, and how to tell whether the project already has it. Version 1.0 was revised in place for a while before version numbers were bumped consistently, so a project recording 1.0 may already have some of the 1.1.0 changes. Check each entry against the project's actual `AGENTS.md`, `Sentinel-Notes/`, and gate check before proposing it; never assume it's missing because the version number is older. Group what you find into the three kinds below, present the list with a proposed action for each, and confirm before applying anything.
 
 - **Standing notes and conventions.** These only add or correct text in `AGENTS.md`. Apply them directly from the named Part, without re-running that whole prompt; a full audit to land one paragraph wastes the user's time.
 - **Gate-check changes.** These change what the hook or manual command should do. They fall under the re-validation flag above: list them for `03`, which re-checks the existing implementation against them.
 - **Run-time only.** These change how the prompts behave while running and leave nothing in the project. Mention them briefly; there's nothing to apply.
 
-*1.1 (changes since 1.0):*
+*1.2.0 (changes since 1.1.0):*
+
+- Convention: the notes folder is now named `Sentinel-Notes/`, with a capital S and capital N. Earlier versions called it `sentinel-notes/`. Applies to any project whose notes folder is lowercase. Already present if the folder's name, as the filesystem or `git ls-files` spells it, is `Sentinel-Notes`. Don't trust a directory listing on Windows or macOS to tell you, since those treat the two spellings as one folder and can display either.
+- Standing note: update every mention of the folder in `AGENTS.md` and in `.gitignore` to the new spelling. On a case-sensitive system a lowercase `.gitignore` entry no longer matches the renamed folder.
+- Gate check: any hook or manual command that reads or writes a path inside the notes folder (the session-start hook in `03`, Part 0c, and the manual command's checks) needs the new spelling. List these for `03` to re-check.
+- Renaming the folder: on a case-insensitive system a plain rename to a name that differs only by case can fail or be ignored. Rename it to a temporary name first, then to `Sentinel-Notes`. If the folder is tracked by git, use `git mv` for both steps so git records the change.
+- Run-time only: versions are now written major.minor.patch. A recorded two-part version such as `1.1` means `1.1.0`.
+
+*1.1.0 (changes since 1.0):*
 
 - Standing note — session handoff file and session-start read order (`01`, Part 11). Already present if `AGENTS.md` names a handoff file and says what to read first in a new session.
 - Standing note — terse comments are limited to one or two sentences, with longer explanation moved to `AGENTS.md` (`01`, Part 9). Applies only if the recorded comment philosophy is terse/minimal. Already present if `AGENTS.md` states a sentence limit.
@@ -76,7 +84,7 @@ When this is the case:
 - **VCS status**: confirm this is a git repository (or note if not); commit count; number of distinct commit authors; whether an established commit-message convention is already in use (Conventional Commits prefixes, a consistent subject-length pattern, whether bodies are typically used) — if a real pattern already exists, note it explicitly so the Integration Audit's Part 4 can propose matching it instead of asking the user cold.
 - **Version/release status**: a version field from a manifest file if present, and whether git tags/releases exist — note whether this reads as pre-release/experimental or an established public project.
 - **Existing automation**: any git hooks, CI config, npm/package scripts, or a pre-commit framework already in place. If any of it looks like an existing gate-check/quality-enforcement system (not just generic build tooling), note it specifically — the Integration Audit reads its actual logic rather than just its presence, and later prompts will ask whether the user wants new checks to match its style or use Sentinel's own conventions.
-- **Existing docs and scaffolding**: whether `AGENTS.md`, `README`, `LICENSE`, `.gitignore`, `sentinel-notes/`, and `scratch/` already exist, noted but not read in full here — the other prompts handle reading their actual content and won't recreate what's already there.
+- **Existing docs and scaffolding**: whether `AGENTS.md`, `README`, `LICENSE`, `.gitignore`, `Sentinel-Notes/`, and `scratch/` already exist, noted but not read in full here — the other prompts handle reading their actual content and won't recreate what's already there.
 - **Existing design documentation**: check common conventions for a software/technical design document — `docs/DESIGN.md`, `docs/ARCHITECTURE.md`, a `docs/adr/` directory of individual decision records, or a doc linked from the README. If one exists, note its path — the Design & Code Quality Audit uses it as grounding for checking whether the actual implementation still matches documented intent, which is a different question from internal consistency.
 
 ### Part 2 — Ask the user directly
@@ -98,9 +106,9 @@ Produce `PROJECT_PROFILE.md` at the project root containing every value gathered
 - VCS status, commit/contributor counts, and any detected commit-message convention
 - Version/release status
 - Existing automation detected, and whether it looks like a pre-existing gate-check system specifically
-- Sentinel version (1.1), and whether this was a fresh run or an update run — if an update, from which prior version, and whether an existing gate-check hook needs re-validation as a result
+- Sentinel version (1.2.0), and whether this was a fresh run or an update run — if an update, from which prior version, and whether an existing gate-check hook needs re-validation as a result
 - Whether this was a blank/near-empty project run (per Part 0a), and which fields were deferred as a result rather than evaluated-and-empty
-- Which of AGENTS.md / README / LICENSE / .gitignore / sentinel-notes/ / scratch/ already exist
+- Which of AGENTS.md / README / LICENSE / .gitignore / Sentinel-Notes/ / scratch/ already exist
 - Path to an existing design document, if one was found (or "none found")
 - A "flagged for follow-up" section listing anything incidental and out-of-scope noticed during discovery (per the note above), so it isn't lost before `TODO.md` exists to hold it properly
 

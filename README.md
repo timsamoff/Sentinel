@@ -1,6 +1,6 @@
 # Sentinel
 
-**Version 1.1**
+**Version 1.2.0**
 
 ***Rigorous, repeatable quality gates for any AI coding agent, any project, any language.***
 
@@ -81,7 +81,7 @@ The best order is 0, 1, 2, 3, since each stage reads what the previous one produ
 
 **The backlog stays visible.** If the agent finishes an unrelated task while `TODO.md` items remain open, it mentions them briefly before ending its response.
 
-**Unfinished work survives the end of a session.** The agent keeps `sentinel-notes/HANDOFF.md` current while it works: what's in progress, what failed, and the next steps in order. It rewrites the file as each step finishes, so closing the window or a crash loses at most the last step. Telling the agent you're done before you close still gives the most complete handoff. The next session reads it before anything else, then the open `TODO.md` items. If the handoff doesn't account for uncommitted changes, that session says it may be out of date. If your setup already uses a handoff file, the agent uses that one instead. Where your tool can run a command at session start, prompt 3 offers a hook that puts the handoff in front of the agent automatically, so reading it doesn't depend on the agent remembering to.
+**Unfinished work survives the end of a session.** The agent keeps `Sentinel-Notes/HANDOFF.md` current while it works: what's in progress, what failed, and the next steps in order. It rewrites the file as each step finishes, so closing the window or a crash loses at most the last step. Telling the agent you're done before you close still gives the most complete handoff. The next session reads it before anything else, then the open `TODO.md` items. If the handoff doesn't account for uncommitted changes, that session says it may be out of date. If your setup already uses a handoff file, the agent uses that one instead. Where your tool can run a command at session start, prompt 3 offers a hook that puts the handoff in front of the agent automatically, so reading it doesn't depend on the agent remembering to.
 
 **Terse comments have a hard length.** If you pick the terse comment style, comments are limited to one or two sentences. Longer explanations go in `AGENTS.md`, not in the code.
 
@@ -89,7 +89,7 @@ The best order is 0, 1, 2, 3, since each stage reads what the previous one produ
 
 Running a newer version of Sentinel on a project it has already touched is treated as an update. Prompt 0 compares the version recorded in `PROJECT_PROFILE.md` with the current one, flags renamed conventions, and tells prompt 3 to re-validate the existing hook. A hook built under an older version can carry bugs that later versions fixed in the prompt text, so an update isn't complete until the hook has been re-checked.
 
-Prompt 0 carries a version history listing what each release changed, where, and how to tell whether a project already has it. Changes that only add standing notes to `AGENTS.md` are applied directly, without re-running a full audit. Copy the new `Sentinel-Prompts/` folder over the old one before starting.
+Versions are written major.minor.patch, and a recorded two-part version such as 1.1 means 1.1.0. Prompt 0 carries a version history listing what each release changed, where, and how to tell whether a project already has it. Changes that only add standing notes to `AGENTS.md` are applied directly, without re-running a full audit. Copy the new `Sentinel-Prompts/` folder over the old one before starting.
 
 With `sentinel-init.md`, you don't need to work out which stages to re-run. It runs prompt 0 and follows its recommendation.
 
@@ -100,7 +100,7 @@ If you run the prompts individually, decide what the update actually changed. If
 - **`PROJECT_PROFILE.md`:** the confirmed project context, including your agent's conventions.
 - **`AGENTS.md` or `CLAUDE.md`:** the project's authoritative internal record, kept current by the gate check.
 - **A design document (optional):** a narrative overview, stored at the root by default or wherever the project already keeps docs.
-- **`sentinel-notes/`:** audit findings and a brief `TODO.md` with one line per item. Items that need more detail link to their own design brief file. It also holds `HANDOFF.md` while a session's work is unfinished.
+- **`Sentinel-Notes/`:** audit findings and a brief `TODO.md` with one line per item. Items that need more detail link to their own design brief file. It also holds `HANDOFF.md` while a session's work is unfinished.
 - **`scratch/`:** a git-ignored folder for throwaway verification scripts.
 - **`INTEGRATION_CHECKLIST.md`:** the touchpoint checklist and gate-check description.
 - **Exceptions:** a `sentinel-exceptions` file for documented, owned, expiring exceptions, and a `Sentinel-Override: <reason>` commit trailer for one-off cases. Both are deliberate acknowledgments, not silent bypasses.
