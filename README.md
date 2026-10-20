@@ -1,4 +1,4 @@
-<img  src="media/sentinel-icon.png"  width="128px"  alt="Sentinel">
+<img  src="media/sentinel-icon-512.png"  width="128px"  alt="Sentinel">
 
 
 # Sentinel
