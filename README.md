@@ -1,3 +1,6 @@
+<img  src="https://github.com/timsamoff/Sentinel/blob/main/media/sentinel-icon-v02.png?raw=true"  width="128px"  alt="Sentinel">
+
+
 # Sentinel
 
 **Version 1.2.0**
