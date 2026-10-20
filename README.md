@@ -1,4 +1,4 @@
-<img  src="https://github.com/timsamoff/Sentinel/blob/main/media/sentinel-icon-v02.png?raw=true"  width="128px"  alt="Sentinel">
+<img  src="media/sentinel-icon-v02.png"  width="128px"  alt="Sentinel">
 
 
 # Sentinel
