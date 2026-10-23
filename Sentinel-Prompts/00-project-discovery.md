@@ -1,6 +1,6 @@
 # Sentinel: Project Discovery Prompt (Portable — run first, before 01)
 
-**Version 1.2.0**
+**Version 1.3.0**
 
 Run this once, before the Design & Code Quality Audit. It's read-only against your codebase except for producing one file (`PROJECT_PROFILE.md`) — it detects what it reasonably can, asks you directly for what it can't, and hands the result to the two other prompts that have `[PROJECT-SPECIFIC]` brackets (Design & Code Quality Audit and Integration Audit) so those brackets don't have to be filled in by hand. The Gate-Check Implementation prompt has no brackets of its own, but can still reuse this profile's "existing automation" finding instead of re-detecting it from scratch. Re-run this if the project changes significantly (new surface added, major restructure), or if you've updated to a newer version of these prompts — see the update-detection note below — rather than trusting a stale profile.
 
@@ -31,6 +31,13 @@ Before anything else, check whether `PROJECT_PROFILE.md` already exists. If it d
 - **Standing notes and conventions.** These only add or correct text in `AGENTS.md`. Apply them directly from the named Part, without re-running that whole prompt; a full audit to land one paragraph wastes the user's time.
 - **Gate-check changes.** These change what the hook or manual command should do. They fall under the re-validation flag above: list them for `03`, which re-checks the existing implementation against them.
 - **Run-time only.** These change how the prompts behave while running and leave nothing in the project. Mention them briefly; there's nothing to apply.
+
+*1.3.0 (changes since 1.2.0):*
+
+- Standing note: commit messages are written in the user's voice and describe the change, never the agent, the session, or "the user" as a third party (`02`, Part 4). Already present if `AGENTS.md` says commits read as the user's own.
+- Standing note: no invented trailers. Only trailers the project's convention defines are allowed, and the allowed list is recorded (`02`, Part 4). Already present if `AGENTS.md` lists allowed trailers.
+- Convention: the per-commit `Sentinel-Override:` trailer is now a choice made during the Integration Audit, and when chosen it is human-only, so the agent never writes it (`02`, Part 5). Applies only to projects that have a bullet-count cap or another override. Already present if `AGENTS.md` says the agent never adds an override.
+- Gate check: a trailer allowlist and an agent-voice phrase check in the `commit-msg` hook, both hard blocks, and the same checks run after the fact by a manual command (`03`, Part 2). Already present if the hook rejects an unlisted trailer. Applies to every commit style.
 
 *1.2.0 (changes since 1.1.0):*
 
@@ -106,7 +113,7 @@ Produce `PROJECT_PROFILE.md` at the project root containing every value gathered
 - VCS status, commit/contributor counts, and any detected commit-message convention
 - Version/release status
 - Existing automation detected, and whether it looks like a pre-existing gate-check system specifically
-- Sentinel version (1.2.0), and whether this was a fresh run or an update run — if an update, from which prior version, and whether an existing gate-check hook needs re-validation as a result
+- Sentinel version (1.3.0), and whether this was a fresh run or an update run — if an update, from which prior version, and whether an existing gate-check hook needs re-validation as a result
 - Whether this was a blank/near-empty project run (per Part 0a), and which fields were deferred as a result rather than evaluated-and-empty
 - Which of AGENTS.md / README / LICENSE / .gitignore / Sentinel-Notes/ / scratch/ already exist
 - Path to an existing design document, if one was found (or "none found")

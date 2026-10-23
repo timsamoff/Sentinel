@@ -3,7 +3,7 @@
 
 # Sentinel
 
-**Version 1.2.0**
+**Version 1.3.0**
 
 ***Rigorous, repeatable quality gates for any AI coding agent, any project, any language.***
 
@@ -76,6 +76,8 @@ The best order is 0, 1, 2, 3, since each stage reads what the previous one produ
 
 **Commit autonomy is your choice.** Prompt 3 asks once whether the agent should confirm every commit (the default), commit freely but confirm before pushing, or run fully automatically. Your answer is recorded in `AGENTS.md`.
 
+**Commits read as yours.** Whatever style you pick, commit messages are written in your voice and describe the change, not the collaboration. No "at the user's direction," no mentions of the agent or the session, and no trailers the agent makes up. The hook rejects trailer-shaped lines that aren't on your allowed list, and a short list of agent-voice phrases. The phrase list is weaker than the trailer check and will miss wordings it doesn't contain, so the rule also lives in `AGENTS.md`.
+
 **The plain terse commit style means no body, ever.** The hook enforces this as a hard block. If a change is too broad for one honest subject line, split it into several commits.
 
 **Design checks adapt to the project.** A full graphical interface (web, mobile, desktop, or game) gets the complete design audit. A presentational surface without a GUI, such as a CLI's color scheme, gets the parts that apply. A backend service or library gets only the code-quality section.
@@ -106,7 +108,7 @@ If you run the prompts individually, decide what the update actually changed. If
 - **`Sentinel-Notes/`:** audit findings and a brief `TODO.md` with one line per item. Items that need more detail link to their own design brief file. It also holds `HANDOFF.md` while a session's work is unfinished.
 - **`scratch/`:** a git-ignored folder for throwaway verification scripts.
 - **`INTEGRATION_CHECKLIST.md`:** the touchpoint checklist and gate-check description.
-- **Exceptions:** a `sentinel-exceptions` file for documented, owned, expiring exceptions, and a `Sentinel-Override: <reason>` commit trailer for one-off cases. Both are deliberate acknowledgments, not silent bypasses.
+- **Exceptions:** a `sentinel-exceptions` file for documented, owned, expiring exceptions, and, if you choose it during setup, a `Sentinel-Override: <reason>` commit trailer for one-off cases that only you write, never the agent. Both are deliberate acknowledgments, not silent bypasses.
 - **A `TODO.md` sync check:** a hard gate for items linked to a design brief, and a non-blocking reminder for everything else.
 - **The pre-commit hook itself:** stored in a tracked location so it survives a fresh clone, plus a full-repo scan run on a schedule or on push.
 - **A session-start hook (optional):** where your tool supports one, it shows the agent any open handoff at the start of every session.
