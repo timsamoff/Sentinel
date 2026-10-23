@@ -1,6 +1,6 @@
 # Sentinel: Gate-Check Implementation Prompt (Portable — for any AI coding agent, any project)
 
-**Version 1.3.0**
+**Version 1.4.0**
 
 This prompt is the one that actually implements — the prior two deliberately stop at "propose and wait for review." Confirm with the user that the proposals have been reviewed and approved before running this, if that hasn't already happened.
 
@@ -82,6 +82,7 @@ Like Part 0b, this isn't a project-specific proposal and isn't gated on `INTEGRA
 - Word the lead-in as an instruction, not a heading. Hook output reaches the agent as background context, and a bare label like "Handoff from a previous session:" lets it decide the handoff is irrelevant to an unrelated first question and say nothing. That happened in real testing, with the read-order note also in place. Use something like: "A handoff from a previous session follows. In your first reply, whatever the user asks, start with one line saying a handoff exists and what it covers, then answer their question. If version control shows uncommitted changes the handoff doesn't mention, say in that same line that it may be out of date." One line keeps the reminder from crowding out the actual answer. The hook only prints the instruction; the agent runs the version-control check itself, so the hook stays a simple file print.
 - Point it at whichever handoff file the project actually uses, including a user-level one the Part 11 note deferred to, and resolve the path from the project root rather than the current directory.
 - Match the local-only or shared choice made for `Sentinel-Notes/`: a local-only project puts the hook in the tool's local, untracked settings file (`.claude/settings.local.json` for Claude Code), a shared one in the tracked file.
+- If the user said they run sessions elsewhere (a cloud or remote session, another machine), the local, untracked settings file doesn't exist in those sessions. Put the hook in the tracked settings file instead, and check the tool's documentation for whether hooks defined in a repository's settings run in that environment. If they don't, say so plainly; the `AGENTS.md` note and its close-out are then the only protection there.
 - Keep the `AGENTS.md` note either way. The hook covers tools and sessions that run it; the note covers everything else, including a teammate on a different tool.
 
 **Test it:** with a handoff file present, start a new session and ask something unrelated; the agent's first reply should mention the handoff. If it doesn't, ask it whether it received hook output and to quote it. That separates a hook that never ran from output the agent saw and skipped, which need different fixes. Then remove or empty the file, start another new session, and confirm nothing is printed and nothing errors.

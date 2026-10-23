@@ -1,6 +1,6 @@
 # Sentinel: Init (Portable — runs 00 through 03 in sequence)
 
-**Version 1.3.0**
+**Version 1.4.0**
 
 This is a thin orchestrator, not a fifth prompt with its own logic. It exists to remove the friction of manually pasting four separate files one at a time — it does not change what any of them do, and it does not collapse or skip the review checkpoints each one already has. If you'd rather run the four prompts individually, or jump into the middle of the sequence, use them directly; this file is a convenience wrapper around the exact same process.
 
