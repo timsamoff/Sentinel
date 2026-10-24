@@ -9,6 +9,9 @@
   <meta name="theme-color" content="#f5f9fd" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0d1827" media="(prefers-color-scheme: dark)">
   <link rel="canonical" href="https://samoff.com/sentinel/">
+  <link rel="icon" href="favicon.ico" sizes="16x16 32x32 48x48">
+  <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="preload" href="fonts/AtkinsonHyperlegibleNext-Variable.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/styles.css">
@@ -28,7 +31,7 @@
   <a class="skip-link" href="#main">Skip to content</a>
 
   <header>
-    <a href="#top" class="site-name">Sentinel</a>
+    <a href="#top" class="site-name"><img src="media/sentinel-icon-512.png" width="32" height="32" alt="">Sentinel</a>
     <nav aria-label="Main">
       <ul>
         <li><a href="#what-it-does">What it does</a></li>
@@ -110,7 +113,15 @@
       <p>The quickest way is this command, run from your project's root. It needs no git.</p>
       <div class="code-block">
         <pre tabindex="0" aria-label="Install command"><code id="install-command">mkdir -p Sentinel-Prompts &amp;&amp; cd Sentinel-Prompts &amp;&amp; for f in 00-project-discovery.md 01-design-quality-audit.md 02-integration-audit.md 03-gate-check-implementation.md sentinel-init.md; do curl -sO "https://raw.githubusercontent.com/timsamoff/Sentinel/main/Sentinel-Prompts/$f"; done &amp;&amp; cd ..</code></pre>
-        <button type="button" class="copy-button" data-copy-target="install-command" hidden>Copy</button>
+        <button type="button" class="copy-button" data-copy-target="install-command" aria-label="Copy install command" hidden>
+          <svg class="icon-copy" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
+            <rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+            <path d="M5 15V6a2 2 0 0 1 2-2h9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <svg class="icon-check" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
+            <path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
         <p class="copy-status" role="status" aria-live="polite"></p>
       </div>
       <p>If you don't have <code>curl</code>, replace <code>curl -sO</code> with <code>wget -q</code>. You can also clone this repo, copy the folder out, and delete the clone.</p>
