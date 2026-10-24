@@ -8,6 +8,17 @@
   Mobile-first: base styles are for a 320px phone, queries use min-width.
 */
 
+/* ---------- Font ----------
+   One variable file covers every weight from 200 to 800. OFL.txt sits beside
+   it in fonts/. */
+@font-face {
+  font-family: "Atkinson Hyperlegible Next";
+  src: url("../fonts/AtkinsonHyperlegibleNext-Variable.woff2") format("woff2");
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ---------- Palette (sampled from media/sentinel-icon-512.png) ---------- */
 :root {
   --blue-50: #f5f9fd;
