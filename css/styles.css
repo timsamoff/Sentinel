@@ -450,9 +450,10 @@ footer p {
 
 footer ul {
   display: flex;
+  margin-inline-start: calc(-1 * var(--space-3)); /* aligns link text with the line above */
   flex-wrap: wrap;
   column-gap: var(--space-5);
-  margin: 0;
+  margin-block: 0;
   padding: 0;
   list-style: none;
 }

@@ -63,5 +63,6 @@
 
   window.addEventListener('scroll', queueUpdate, { passive: true });
   window.addEventListener('resize', queueUpdate);
+  document.addEventListener('sentinel:filter', queueUpdate);
   update();
 })();
