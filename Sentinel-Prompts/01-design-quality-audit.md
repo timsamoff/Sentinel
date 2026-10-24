@@ -1,6 +1,6 @@
 # Sentinel: Design & Code Quality Audit Prompt (Portable — for any AI coding agent, any project)
 
-**Version 1.4.0**
+**Version 1.5.0**
 
 This one produces a report and recommendations, not a checklist gate — quality is a judgment call, not a pass/fail. Some findings from this pass may turn into new gate-check items later (e.g. "no new hardcoded hex colors"), but that decision comes after review, not automatically.
 
