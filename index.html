@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sentinel: Quality gates for AI coding agents</title>
+  <meta name="description" content="Open-source prompts that have an AI coding agent audit your project, map where changes touch, and build quality gates. Works with Claude Code and Codex.">
+  <meta name="author" content="Tim Samoff">
+  <meta name="theme-color" content="#f5f9fd" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0d1827" media="(prefers-color-scheme: dark)">
+  <link rel="canonical" href="https://samoff.com/sentinel/">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Sentinel">
+  <meta property="og:title" content="Sentinel: Quality gates for AI coding agents">
+  <meta property="og:description" content="Rigorous, repeatable quality gates for any AI coding agent, any project, any language.">
+  <meta property="og:url" content="https://samoff.com/sentinel/">
+  <meta property="og:image" content="https://samoff.com/sentinel/media/sentinel-icon-512.png">
+  <meta property="og:image:width" content="512">
+  <meta property="og:image:height" content="512">
+  <meta property="og:image:alt" content="The Sentinel icon: a pale blue shield wrapped in two steel ribbons.">
+  <meta name="twitter:card" content="summary">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header>
+    <a href="#top" class="site-name">Sentinel</a>
+    <nav aria-label="Main">
+      <ul>
+        <li><a href="#what-it-does">What it does</a></li>
+        <li><a href="#installation">Install</a></li>
+        <li><a href="#the-prompts">The prompts</a></li>
+        <li><a href="#what-to-expect">What to expect</a></li>
+        <li><a href="#license">License</a></li>
+      </ul>
+    </nav>
+    <button type="button" class="theme-toggle" aria-label="Dark mode" aria-pressed="false" hidden>
+      <svg class="icon-sun" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
+        <circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
+        <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <img src="media/sentinel-icon-512.png" width="160" height="160" alt="Sentinel">
+      <h1 id="hero-title">Sentinel</h1>
+      <p class="version">Version 1.4.0</p>
+      <p class="tagline">Rigorous, repeatable quality gates for any AI coding agent, any project, any language.</p>
+      <p class="actions">
+        <a href="#installation">Install</a>
+        <a href="https://github.com/timsamoff/Sentinel">View on GitHub</a>
+      </p>
+    </section>
+
+    <search hidden>
+      <label for="page-filter">Filter this page</label>
+      <input type="search" id="page-filter" autocomplete="off">
+      <button type="button" class="filter-clear">Clear filter</button>
+      <p class="filter-status" role="status" aria-live="polite"></p>
+    </search>
+
+    <nav aria-label="Page contents" class="contents">
+      <h2 id="contents-title">Contents</h2>
+      <ul>
+        <li><a href="#what-it-does">What it does</a></li>
+        <li><a href="#requirements">Requirements</a></li>
+        <li><a href="#installation">Installation</a></li>
+        <li><a href="#the-prompts">The prompts</a></li>
+        <li><a href="#running-the-suite">Running the suite</a></li>
+        <li><a href="#what-to-expect">What to expect</a></li>
+        <li><a href="#upgrading">Upgrading</a></li>
+        <li><a href="#what-you-end-up-with">What you end up with</a></li>
+        <li><a href="#limitations">Limitations</a></li>
+        <li><a href="#license">License</a></li>
+      </ul>
+    </nav>
+
+    <section id="what-it-does" aria-labelledby="what-it-does-title">
+      <h2 id="what-it-does-title">What it does</h2>
+      <p>Sentinel is a set of four prompts that give an AI coding agent a disciplined process for any code or design project. The agent learns what the project is, audits its code and design quality, maps every place a future change needs to touch, and then builds automated checks that hold those standards in place.</p>
+      <p>Setup is the expensive part. The prompts read your actual codebase and history, which costs real time and tokens once. What you get in return is a pre-commit hook that checks only each commit's diff, plus a periodic full-repo scan for slower drift. Ordinary commits stay cheap.</p>
+      <p>It is a guided setup, not a one-shot report. The agent will stop and ask about your preferences (commit style, comment philosophy, whether docs stay local or shared), and your answers become enforced rules. Treat those questions as real decisions.</p>
+    </section>
+
+    <section id="requirements" aria-labelledby="requirements-title">
+      <h2 id="requirements-title">Requirements</h2>
+      <p>You need an AI coding agent with file-system and shell access, started in your project. Sentinel is confirmed to work with Claude Code and OpenAI Codex. Cursor, Gemini CLI, Windsurf, and GitHub Copilot are likely compatible but untested.</p>
+      <p>Each prompt identifies which agent it is running under and adapts to it. That includes the name of the persistent context file (<code>AGENTS.md</code> for most tools, <code>CLAUDE.md</code> for Claude Code), the permission mechanism, and any automatic commit attribution the tool adds.</p>
+    </section>
+
+    <section id="installation" aria-labelledby="installation-title">
+      <h2 id="installation-title">Installation</h2>
+      <p>This repo is a source to copy from, not a place to work. Copy the whole <code>Sentinel-Prompts/</code> folder into your project. Its location inside the project doesn't matter.</p>
+      <p>The quickest way is this command, run from your project's root. It needs no git.</p>
+      <div class="code-block">
+        <pre tabindex="0" aria-label="Install command"><code id="install-command">mkdir -p Sentinel-Prompts &amp;&amp; cd Sentinel-Prompts &amp;&amp; for f in 00-project-discovery.md 01-design-quality-audit.md 02-integration-audit.md 03-gate-check-implementation.md sentinel-init.md; do curl -sO "https://raw.githubusercontent.com/timsamoff/Sentinel/main/Sentinel-Prompts/$f"; done &amp;&amp; cd ..</code></pre>
+        <button type="button" class="copy-button" data-copy-target="install-command" hidden>Copy</button>
+        <p class="copy-status" role="status" aria-live="polite"></p>
+      </div>
+      <p>If you don't have <code>curl</code>, replace <code>curl -sO</code> with <code>wget -q</code>. You can also clone this repo, copy the folder out, and delete the clone.</p>
+      <p>Always start your agent from your project's root, not from inside <code>Sentinel-Prompts/</code>. Everything the prompts produce is written to the project root.</p>
+    </section>
+
+    <section id="the-prompts" aria-labelledby="the-prompts-title">
+      <h2 id="the-prompts-title">The prompts</h2>
+      <p><code>sentinel-init.md</code> runs the four stages below in order. It is the recommended way to use the suite. It is unnumbered because it is a wrapper, not a fifth stage.</p>
+      <ol start="0">
+        <li><code>00-project-discovery.md</code> detects the project's stack, surfaces, and conventions, and asks you for what it can't detect. It produces <code>PROJECT_PROFILE.md</code>, which the later prompts read. On a blank or nearly empty project, it asks you directly instead of inferring.</li>
+        <li><code>01-design-quality-audit.md</code> audits code quality and, where there is a user interface, design consistency: color and spacing systems, responsive layout, accessibility, and whether the interface looks generic or machine-made. It also checks for a design document or offers to create one. It makes small, low-risk cleanups and reports everything else.</li>
+        <li><code>02-integration-audit.md</code> reads the project's history to find every place a new feature has needed to touch, including places that were missed. It produces <code>INTEGRATION_CHECKLIST.md</code> and proposes gate checks without building them.</li>
+        <li><code>03-gate-check-implementation.md</code> re-validates the proposals from 01 and 02 against the current code, then builds and wires in the checks. It is the only prompt that implements.</li>
+      </ol>
+    </section>
+
+    <section id="running-the-suite" aria-labelledby="running-the-suite-title">
+      <h2 id="running-the-suite-title">Running the suite</h2>
+      <p>Point your agent at <code>Sentinel-Prompts/sentinel-init.md</code> and it will run all four stages. It moves from one stage to the next on its own, but it always stops before stage 3 to confirm you have reviewed what 01 and 02 proposed. Each stage's own questions also stop and wait for you.</p>
+      <p>You can also run a single prompt, either by pasting its contents into a session or by asking the agent to read and run the file. Use individual prompts when you want to review between stages, need only one or two of them, or are re-running part of the suite after an update.</p>
+      <p>The best order is 0, 1, 2, 3, since each stage reads what the previous one produced. Prompts 1 and 2 can run without 0, though you'll fill in the project details yourself. Prompt 3 requires <code>INTEGRATION_CHECKLIST.md</code> and will tell you to run 2 first if it's missing.</p>
+    </section>
+
+    <section id="what-to-expect" aria-labelledby="what-to-expect-title">
+      <h2 id="what-to-expect-title">What to expect</h2>
+      <p class="fold-controls" hidden>
+        <button type="button" data-fold-action="open">Open all</button>
+        <button type="button" data-fold-action="close">Close all</button>
+      </p>
+
+      <details open>
+        <summary>Plan to be present.</summary>
+        <p>Prompts 0 through 2 pause to ask questions, and your answers become permanent parts of the hook that prompt 3 builds. Where a question has fixed answers, the agent will show clickable options if your tool supports them.</p>
+      </details>
+
+      <details>
+        <summary>Git is the default, not a requirement.</summary>
+        <p>Without version control, prompt 3 builds a manual command instead of a hook. That command checks for a <code>.git</code> directory each time it runs and offers once to switch to a real hook if one appears. A version control system with its own trigger mechanism, such as Perforce, is treated the same as git. The manual command is also used for any Sentinel output you choose to keep out of version control, since a hook can't see ignored files. When git is in use but you choose the manual command, commit-message rules are still checked against your most recent commit after the fact.</p>
+      </details>
+
+      <details>
+        <summary>Commit autonomy is your choice.</summary>
+        <p>Prompt 3 asks once whether the agent should confirm every commit (the default), commit freely but confirm before pushing, or run fully automatically. Your answer is recorded in <code>AGENTS.md</code>.</p>
+      </details>
+
+      <details>
+        <summary>Commits read as yours.</summary>
+        <p>Whatever style you pick, commit messages are written in your voice and describe the change, not the collaboration. No "at the user's direction," no mentions of the agent or the session, and no trailers the agent makes up. The hook rejects trailer-shaped lines that aren't on your allowed list, and a short list of agent-voice phrases. The phrase list is weaker than the trailer check and will miss wordings it doesn't contain, so the rule also lives in <code>AGENTS.md</code>.</p>
+      </details>
+
+      <details>
+        <summary>The plain terse commit style means no body, ever.</summary>
+        <p>The hook enforces this as a hard block. If a change is too broad for one honest subject line, split it into several commits.</p>
+      </details>
+
+      <details>
+        <summary>Terse comments have a hard length.</summary>
+        <p>If you pick the terse comment style, comments are limited to one or two sentences. Longer explanations go in <code>AGENTS.md</code>, not in the code.</p>
+      </details>
+
+      <details>
+        <summary>Existing gate checks are audited, not just detected.</summary>
+        <p>Prompt 2 reads any existing system for known weaknesses, such as checking the working tree instead of staged files, or failing silently. It then asks whether new checks should follow that system's style or Sentinel's.</p>
+      </details>
+
+      <details>
+        <summary>A design document is offered, never assumed.</summary>
+        <p>If one exists, the audits check the code against it. If not, you're asked before one is created. A generated design document reads as ordinary documentation, but it won't state a rationale as fact without evidence. Once it exists, it gets two checks: a per-commit gate for architecturally significant changes, and an occasional review, tied to releases, that confirms its content is still true.</p>
+      </details>
+
+      <details>
+        <summary>Design checks adapt to the project.</summary>
+        <p>A full graphical interface (web, mobile, desktop, or game) gets the complete design audit. A presentational surface without a GUI, such as a CLI's color scheme, gets the parts that apply. A backend service or library gets only the code-quality section.</p>
+      </details>
+
+      <details>
+        <summary>New kinds of work don't need a full re-run.</summary>
+        <p>If you add something with no precedent in the project, name it and ask what covers it. The agent will point you to the right prompt and section.</p>
+      </details>
+
+      <details>
+        <summary>The backlog stays visible.</summary>
+        <p>If the agent finishes an unrelated task while <code>TODO.md</code> items remain open, it mentions them briefly before ending its response.</p>
+      </details>
+
+      <details>
+        <summary>Unfinished work survives the end of a session.</summary>
+        <p>The agent keeps <code>Sentinel-Notes/HANDOFF.md</code> current while it works: what's in progress, what failed, and the next steps in order. It rewrites the file as each step finishes, so closing the window or a crash loses at most the last step. Telling the agent you're done before you close still gives the most complete handoff. The next session reads it before anything else, then the open <code>TODO.md</code> items. If the handoff doesn't account for uncommitted changes, that session says it may be out of date. If your setup already uses a handoff file, the agent uses that one instead, and still writes the rules for it into <code>AGENTS.md</code>, since your personal configuration and the agent's own memory don't reach a cloud or remote session. The agent also records a short close-out (handoff, any log you keep, and any step that needs your approval) and ends it with one line saying what was done and what was skipped. If you sometimes work in remote sessions, it asks once, because those sessions see only what is committed to the repository. Where your tool can run a command at session start, prompt 3 offers a hook that puts the handoff in front of the agent automatically, so reading it doesn't depend on the agent remembering to.</p>
+      </details>
+    </section>
+
+    <section id="upgrading" aria-labelledby="upgrading-title">
+      <h2 id="upgrading-title">Upgrading</h2>
+      <p>Running a newer version of Sentinel on a project it has already touched is treated as an update. Prompt 0 compares the version recorded in <code>PROJECT_PROFILE.md</code> with the current one, flags renamed conventions, and tells prompt 3 to re-validate the existing hook. A hook built under an older version can carry bugs that later versions fixed in the prompt text, so an update isn't complete until the hook has been re-checked.</p>
+      <p>Versions are written major.minor.patch, and a recorded two-part version such as 1.1 means 1.1.0. Prompt 0 carries a version history listing what each release changed, where, and how to tell whether a project already has it. Changes that only add standing notes to <code>AGENTS.md</code> are applied directly, without re-running a full audit. Copy the new <code>Sentinel-Prompts/</code> folder over the old one before starting.</p>
+      <p>With <code>sentinel-init.md</code>, you don't need to work out which stages to re-run. It runs prompt 0 and follows its recommendation.</p>
+      <p>If you run the prompts individually, decide what the update actually changed. If it only affects gate-check implementation, run 0 and then 3. If it adds a new design check, re-run 1. If it adds a new integration gate category, re-run 2 before 3, since 3 can only build what 2 has proposed.</p>
+    </section>
+
+    <section id="what-you-end-up-with" aria-labelledby="what-you-end-up-with-title">
+      <h2 id="what-you-end-up-with-title">What you end up with</h2>
+      <dl>
+        <dt><code>PROJECT_PROFILE.md</code></dt>
+        <dd>The confirmed project context, including your agent's conventions.</dd>
+        <dt><code>AGENTS.md</code> or <code>CLAUDE.md</code></dt>
+        <dd>The project's authoritative internal record, kept current by the gate check.</dd>
+        <dt>A design document (optional)</dt>
+        <dd>A narrative overview, stored at the root by default or wherever the project already keeps docs.</dd>
+        <dt><code>Sentinel-Notes/</code></dt>
+        <dd>Audit findings and a brief <code>TODO.md</code> with one line per item. Items that need more detail link to their own design brief file. It also holds <code>HANDOFF.md</code> while a session's work is unfinished.</dd>
+        <dt><code>scratch/</code></dt>
+        <dd>A git-ignored folder for throwaway verification scripts.</dd>
+        <dt><code>INTEGRATION_CHECKLIST.md</code></dt>
+        <dd>The touchpoint checklist and gate-check description.</dd>
+        <dt>Exceptions</dt>
+        <dd>A <code>sentinel-exceptions</code> file for documented, owned, expiring exceptions, and, if you choose it during setup, a <code>Sentinel-Override: &lt;reason&gt;</code> commit trailer for one-off cases that only you write, never the agent. Both are deliberate acknowledgments, not silent bypasses.</dd>
+        <dt>A <code>TODO.md</code> sync check</dt>
+        <dd>A hard gate for items linked to a design brief, and a non-blocking reminder for everything else.</dd>
+        <dt>The pre-commit hook itself</dt>
+        <dd>Stored in a tracked location so it survives a fresh clone, plus a full-repo scan run on a schedule or on push.</dd>
+        <dt>A session-start hook (optional)</dt>
+        <dd>Where your tool supports one, it shows the agent any open handoff at the start of every session.</dd>
+        <dt>A new-file-category check</dt>
+        <dd>Flags the first file of a type the project hasn't used before (the first image, the first 3D model) and asks a few questions to route it to the right audit.</dd>
+      </dl>
+    </section>
+
+    <section id="limitations" aria-labelledby="limitations-title">
+      <h2 id="limitations-title">Limitations</h2>
+      <ul>
+        <li><strong>Sentinel audits what an agent can read as text.</strong> Visual scripting such as Unreal Blueprints, along with binary assets like 3D models, textures, and compiled shaders, can be checked for existence and metadata only. Prompt 1 says so rather than skipping them silently.</li>
+        <li><strong>Non-web projects are reasoned through, not battle-tested.</strong> The engines and toolkits named in prompt 1 (Unity, Godot, Qt, SwiftUI, Flutter, and others) illustrate the approach, but none has been tested as thoroughly as web projects. Review those results with extra care.</li>
+        <li><strong>Only Claude Code and OpenAI Codex are confirmed compatible.</strong> Other agents are expected to work but haven't been tested.</li>
+      </ul>
+    </section>
+
+    <section id="license" aria-labelledby="license-title">
+      <h2 id="license-title">License</h2>
+      <p>MIT. See <a href="https://github.com/timsamoff/Sentinel/blob/main/LICENSE"><code>LICENSE</code></a>. You may use, modify, and redistribute these prompts freely, including in closed-source or commercial work, as long as the original copyright notice is kept.</p>
+      <p><a href="https://www.paypal.com/paypalme/timsamoff" rel="noopener">Support this project</a></p>
+    </section>
+  </main>
+
+  <footer>
+    <p>Copyright &copy; 2026 Tim Samoff. Released under the <a href="https://github.com/timsamoff/Sentinel/blob/main/LICENSE">MIT License</a>.</p>
+    <ul>
+      <li><a href="mailto:samoff@gmail.com">samoff@gmail.com</a></li>
+      <li><a href="https://www.paypal.com/paypalme/timsamoff" rel="noopener">Support this project</a></li>
+      <li><a href="https://github.com/timsamoff/Sentinel">GitHub</a></li>
+    </ul>
+  </footer>
+</body>
+</html>
