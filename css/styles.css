@@ -55,19 +55,32 @@ header nav li {
   margin: 0;
 }
 
-header nav a {
+/* Navigation links carry no underline. Hover shows a tinted background and
+   the accent color. Keyboard focus keeps the ring from tokens.css. */
+header nav a,
+.contents a,
+footer ul a {
   display: inline-flex;
   align-items: center;
   min-height: var(--target-size);
+  padding-inline: var(--space-3);
+  border-radius: var(--radius-md);
   color: var(--color-text);
-  font-size: var(--text-sm);
   text-decoration: none;
 }
 
+header nav a {
+  font-size: var(--text-sm);
+}
+
 header nav a:hover,
-header nav a:focus-visible {
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
+footer ul a:hover {
+  background: var(--color-surface);
+  color: var(--color-accent);
+}
+
+.site-name:hover {
+  color: var(--color-accent);
 }
 
 .theme-toggle {
@@ -151,9 +164,11 @@ main > .hero {
   text-decoration: none;
 }
 
-.button:hover {
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
+/* Primary hover: the fill shifts toward the text color, which raises contrast
+   with the label in both themes. */
+.button:not(.button-secondary):hover {
+  background: color-mix(in srgb, var(--color-accent-fill) 70%, var(--color-text));
+  border-color: color-mix(in srgb, var(--color-accent-fill) 70%, var(--color-text));
 }
 
 .button-secondary,
@@ -165,11 +180,14 @@ main > .hero {
   border-color: var(--color-accent);
 }
 
+/* Outlined buttons invert on hover: filled with the accent, label in the
+   on-accent color. */
 .button-secondary:hover,
 .fold-controls button:hover,
 .copy-button:hover,
 .filter-clear:hover {
-  background: var(--color-surface);
+  background: var(--color-accent-fill);
+  color: var(--color-on-accent);
 }
 
 /* ---------- Filter box ---------- */
@@ -225,10 +243,9 @@ search input {
   margin: 0;
 }
 
-.contents a {
-  display: inline-flex;
-  align-items: center;
-  min-height: var(--target-size);
+.contents a:hover {
+  background: var(--color-bg);
+  color: var(--color-accent);
 }
 
 /* ---------- Sections ---------- */
@@ -416,12 +433,6 @@ footer ul {
 
 footer li {
   margin: 0;
-}
-
-footer a {
-  display: inline-flex;
-  align-items: center;
-  min-height: var(--target-size);
 }
 
 /* ---------- 600px and up ---------- */
