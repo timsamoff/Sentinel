@@ -23,12 +23,18 @@ header {
 .site-name {
   display: inline-flex;
   align-items: center;
+  gap: var(--space-2);
   min-height: var(--target-size);
   margin-inline-end: auto;
   color: var(--color-text);
   font-size: var(--text-lg);
   font-weight: var(--weight-bold);
   text-decoration: none;
+}
+
+.site-name img {
+  width: 2rem;
+  height: 2rem;
 }
 
 header nav {
@@ -237,24 +243,46 @@ main > section > h2::before {
 }
 
 /* ---------- Install command ---------- */
+/* The copy button and its status sit in a row above the command, so they
+   never cover scrolled text. DOM order stays pre, button, status. */
 .code-block {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-3);
+  justify-content: flex-end;
+  gap: var(--space-2) var(--space-3);
   margin-block-end: var(--space-4);
 }
 
 .code-block pre {
+  order: 3;
   flex-basis: 100%;
   min-width: 0;
 }
 
 .copy-status {
+  order: 1;
   max-width: none;
   margin: 0;
   color: var(--color-muted);
   font-size: var(--text-sm);
+}
+
+.copy-button {
+  order: 2;
+  display: inline-grid;
+  place-items: center;
+  width: var(--target-size);
+  padding: 0;
+}
+
+.copy-button .icon-check,
+.copy-button[data-copied] .icon-copy {
+  display: none;
+}
+
+.copy-button[data-copied] .icon-check {
+  display: block;
 }
 
 /* ---------- Numbered prompt sequence ---------- */
