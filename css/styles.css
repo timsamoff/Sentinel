@@ -425,7 +425,8 @@ summary::marker {
   color: var(--color-accent);
 }
 
-details > p:last-child {
+details > p:last-child,
+details > dl:last-child {
   margin-block-end: var(--space-4);
 }
 
