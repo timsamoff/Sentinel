@@ -116,11 +116,11 @@
       <h2>Installation</h2>
       <p>Three steps get you started:</p>
       <ol>
-        <li>Copy the <a href="https://github.com/timsamoff/Sentinel/tree/main/Sentinel-Prompts"><code>Sentinel-Prompts/</code> folder</a> from the GitHub repo into your project. A curl or wget command does it in one step.</li>
+        <li>Copy the <a href="https://github.com/timsamoff/Sentinel/tree/main/Sentinel-Prompts"><code>Sentinel-Prompts/</code> folder</a> from the GitHub repo into your project. A <code>curl</code> or <code>wget</code> command does it in one step.</li>
         <li>Start your agent from your project's root.</li>
         <li>Tell it to read and run <code>Sentinel-Prompts/sentinel-init.md</code>. It starts the first stage and asks you questions as it goes.</li>
       </ol>
-      <p>Run one of these commands from your project's root. Use the wget command if you don't have <code>curl</code>. Neither needs git.</p>
+      <p>Run one of these commands from your project's root. Use the <code>wget</code> command if you don't have <code>curl</code>. Neither needs git.</p>
       <h3>Curl</h3>
       <div class="code-block">
         <pre tabindex="0" role="group" aria-label="Curl install command"><code id="install-curl">mkdir -p Sentinel-Prompts &amp;&amp; cd Sentinel-Prompts &amp;&amp; for f in 00-project-discovery.md 01-design-quality-audit.md 02-integration-audit.md 03-gate-check-implementation.md sentinel-init.md; do curl -sO "https://raw.githubusercontent.com/timsamoff/Sentinel/main/Sentinel-Prompts/$f"; done &amp;&amp; cd ..</code></pre>
