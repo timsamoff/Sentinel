@@ -3,7 +3,7 @@
 
 # Sentinel
 
-**Version 1.4.0**
+**Version 1.5.0**
 
 ***Rigorous, repeatable quality gates for any AI coding agent, any project, any language.***
 
@@ -79,6 +79,8 @@ The best order is 0, 1, 2, 3, since each stage reads what the previous one produ
 **Commits read as yours.** Whatever style you pick, commit messages are written in your voice and describe the change, not the collaboration. No "at the user's direction," no mentions of the agent or the session, and no trailers the agent makes up. The hook rejects trailer-shaped lines that aren't on your allowed list, and a short list of agent-voice phrases. The phrase list is weaker than the trailer check and will miss wordings it doesn't contain, so the rule also lives in `AGENTS.md`.
 
 **The plain terse commit style means no body, ever.** The hook enforces this as a hard block. If a change is too broad for one honest subject line, split it into several commits.
+
+**Single line by default, bullets when needed.** The subject line alone is the norm. A short bullet body is allowed only when a change has three or more separate parts, or a behavior change a later reader needs to know about. The hook accepts no body or a valid bullet body and blocks prose. It can't judge whether a body was needed, so the trigger is also recorded in `AGENTS.md`.
 
 **Design checks adapt to the project.** A full graphical interface (web, mobile, desktop, or game) gets the complete design audit. A presentational surface without a GUI, such as a CLI's color scheme, gets the parts that apply. A backend service or library gets only the code-quality section.
 
