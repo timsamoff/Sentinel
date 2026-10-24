@@ -64,5 +64,7 @@
   window.addEventListener('scroll', queueUpdate, { passive: true });
   window.addEventListener('resize', queueUpdate);
   document.addEventListener('sentinel:filter', queueUpdate);
+  // Folds opening or closing moves everything below them. Toggle events don't bubble, so listen in capture.
+  document.addEventListener('toggle', queueUpdate, true);
   update();
 })();
