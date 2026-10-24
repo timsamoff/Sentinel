@@ -25,13 +25,23 @@
     var blocks = [];
     var lists = [];
     var pair = null;
+    var heads = [];
+
+    // A subheading belongs to the block that follows it, so the two show and hide together.
+    function take(child) {
+      var els = heads.concat(child);
+      heads = [];
+      return els;
+    }
 
     [].slice.call(el.children).forEach(function (child) {
       var tag = child.tagName;
-      if (tag === 'P' && !child.classList.contains('fold-controls')) {
-        blocks.push({ els: [child] });
+      if (tag === 'H3') {
+        heads.push(child);
+      } else if (tag === 'P' && !child.classList.contains('fold-controls')) {
+        blocks.push({ els: take(child) });
       } else if (tag === 'DETAILS' || child.classList.contains('code-block')) {
-        blocks.push({ els: [child], fold: tag === 'DETAILS' ? child : null });
+        blocks.push({ els: take(child), fold: tag === 'DETAILS' ? child : null });
       } else if (tag === 'UL' || tag === 'OL') {
         var items = [].slice.call(child.children).map(function (li) { return { els: [li] }; });
         blocks = blocks.concat(items);

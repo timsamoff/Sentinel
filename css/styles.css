@@ -353,6 +353,11 @@ main > section > h2::before {
   display: block;
 }
 
+#installation h3 {
+  margin-block: var(--space-5) var(--space-2);
+  font-size: var(--text-lg);
+}
+
 /* ---------- Numbered prompt sequence ---------- */
 .sequence {
   margin-block: var(--space-5);
