@@ -6,6 +6,7 @@
   var panel = document.querySelector('.contents');
   var lastId;
   var queued = false;
+  var pinned = null; // the section a visitor jumped to; it wins when the page bottom is in view
 
   if (!sections.length || !links.length) return;
 
@@ -22,7 +23,10 @@
     var id = null;
 
     if (!shown.length) return null;
-    if (atBottom) return shown[shown.length - 1].id;
+    if (atBottom) {
+      var target = shown.filter(function (section) { return section.id === pinned; })[0];
+      return (target || shown[shown.length - 1]).id;
+    }
     shown.forEach(function (section) {
       if (section.getBoundingClientRect().top <= line) id = section.id;
     });
@@ -63,6 +67,14 @@
 
   window.addEventListener('scroll', queueUpdate, { passive: true });
   window.addEventListener('resize', queueUpdate);
+  window.addEventListener('hashchange', function () {
+    pinned = window.location.hash.slice(1) || null;
+    queueUpdate();
+  });
+  // Scrolling by hand ends a jump.
+  ['wheel', 'touchstart', 'keydown'].forEach(function (name) {
+    window.addEventListener(name, function () { pinned = null; }, { passive: true });
+  });
   document.addEventListener('sentinel:filter', queueUpdate);
   // Folds opening or closing moves everything below them. Toggle events don't bubble, so listen in capture.
   document.addEventListener('toggle', queueUpdate, true);
