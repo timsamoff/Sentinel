@@ -1,0 +1,487 @@
+/*
+  styles.css: one-off styles for the Sentinel page.
+  Sitewide tokens and base element styles live in tokens.css.
+  Mobile-first. Breakpoints: 600px = 37.5em, 900px = 56.25em, 1200px = 75em.
+*/
+
+/* ---------- Header ---------- */
+html {
+  /* The header only sticks from 900px up, so only then does it need clearing. */
+  scroll-padding-top: var(--space-4);
+}
+
+header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: var(--space-4);
+  padding-block: var(--space-2);
+  border-block-end: var(--border-width) solid var(--color-rule);
+  background: var(--color-bg);
+}
+
+.site-name {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target-size);
+  margin-inline-end: auto;
+  color: var(--color-text);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+  text-decoration: none;
+}
+
+header nav {
+  order: 3;
+  flex-basis: 100%;
+}
+
+header nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+header nav li {
+  margin: 0;
+}
+
+header nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target-size);
+  color: var(--color-text);
+  font-size: var(--text-sm);
+  text-decoration: none;
+}
+
+header nav a:hover,
+header nav a:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.theme-toggle {
+  display: inline-grid;
+  place-items: center;
+  width: var(--target-size);
+  padding: 0;
+  background: transparent;
+  color: var(--color-text);
+  border: var(--border-width) solid var(--color-control-border);
+  border-radius: var(--radius-md);
+}
+
+.theme-toggle:hover {
+  background: var(--color-surface);
+}
+
+.theme-toggle[aria-pressed="true"] .icon-sun,
+.theme-toggle[aria-pressed="false"] .icon-moon {
+  display: none;
+}
+
+/* ---------- Hero ---------- */
+main > .hero {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-block-start: var(--space-6);
+  padding: var(--space-6) var(--space-5);
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--color-tint) 45%, transparent),
+    transparent
+  );
+  border-radius: var(--radius-md);
+}
+
+.hero img {
+  width: clamp(7rem, 4rem + 12vw, 11rem);
+  height: auto;
+  margin-block-end: var(--space-4);
+}
+
+.hero h1 {
+  margin-block-end: var(--space-2);
+}
+
+.version {
+  margin-block-end: var(--space-4);
+  color: var(--color-muted);
+  font-size: var(--text-sm);
+}
+
+.tagline {
+  font-size: var(--text-lg);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  gap: var(--space-3);
+  margin-block: var(--space-3) 0;
+}
+
+/* ---------- Buttons (links styled as buttons) ---------- */
+.button,
+.fold-controls button,
+.copy-button,
+.filter-clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--target-size);
+  padding: 0 var(--space-5);
+  border: 2px solid var(--color-accent-fill);
+  border-radius: var(--radius-md);
+  background: var(--color-accent-fill);
+  color: var(--color-on-accent);
+  font-weight: var(--weight-bold);
+  text-decoration: none;
+}
+
+.button:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.button-secondary,
+.fold-controls button,
+.copy-button,
+.filter-clear {
+  background: transparent;
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.button-secondary:hover,
+.fold-controls button:hover,
+.copy-button:hover,
+.filter-clear:hover {
+  background: var(--color-surface);
+}
+
+/* ---------- Filter box ---------- */
+search {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  margin-block-start: var(--space-6);
+}
+
+search label {
+  flex-basis: 100%;
+  font-weight: var(--weight-bold);
+}
+
+search input {
+  flex: 1 1 14rem;
+  max-width: 28rem;
+}
+
+.filter-status {
+  flex-basis: 100%;
+  min-height: 1.5em;
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--text-sm);
+}
+
+/* ---------- Contents ---------- */
+.contents {
+  margin-block-start: var(--space-6);
+  padding: var(--space-5);
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+}
+
+.contents h2 {
+  margin-block-end: var(--space-3);
+  font-size: var(--text-lg);
+}
+
+.contents ul {
+  display: grid;
+  grid-template-columns: 1fr;
+  column-gap: var(--space-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.contents li {
+  margin: 0;
+}
+
+.contents a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target-size);
+}
+
+/* ---------- Sections ---------- */
+main > section > h2::before {
+  content: "";
+  display: block;
+  width: 2.5rem;
+  height: 4px;
+  margin-block-end: var(--space-3);
+  background: var(--blue-500); /* decorative only */
+  border-radius: 2px;
+}
+
+/* ---------- Install command ---------- */
+.code-block {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  margin-block-end: var(--space-4);
+}
+
+.code-block pre {
+  flex-basis: 100%;
+  min-width: 0;
+}
+
+.copy-status {
+  max-width: none;
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--text-sm);
+}
+
+/* ---------- Numbered prompt sequence ---------- */
+.sequence {
+  margin-block: var(--space-5);
+  padding: 0;
+  list-style: none;
+  counter-reset: step -1;
+}
+
+.sequence li {
+  position: relative;
+  margin: 0;
+  padding-inline-start: calc(var(--target-size) + var(--space-4));
+  padding-block-end: var(--space-5);
+  counter-increment: step;
+}
+
+.sequence li::before {
+  content: counter(step);
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: var(--target-size);
+  height: var(--target-size);
+  background: var(--color-accent-fill);
+  color: var(--color-on-accent);
+  border-radius: 50%;
+  font-weight: var(--weight-bold);
+}
+
+/* The thin rule that joins the circles, echoing the ribbon around the shield. */
+.sequence li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  inset-block: var(--target-size) 0;
+  inset-inline-start: calc(var(--target-size) / 2 - 1.5px);
+  width: 3px;
+  background: var(--blue-500); /* decorative only */
+}
+
+/* ---------- Folds ---------- */
+.fold-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  max-width: none;
+  margin-block-end: var(--space-4);
+}
+
+.fold-controls button {
+  padding: 0 var(--space-4);
+}
+
+details {
+  border-block-start: var(--border-width) solid var(--color-rule);
+}
+
+details:last-of-type {
+  border-block-end: var(--border-width) solid var(--color-rule);
+}
+
+summary {
+  display: list-item;
+  padding-block: var(--space-2);
+}
+
+summary::marker {
+  color: var(--color-accent);
+}
+
+details > p:last-child {
+  margin-block-end: var(--space-4);
+}
+
+/* ---------- What you end up with ---------- */
+#what-you-end-up-with {
+  container-type: inline-size;
+}
+
+dt,
+dd {
+  margin: 0;
+}
+
+dt {
+  padding-block-start: var(--space-3);
+  border-block-start: var(--border-width) solid var(--color-rule);
+}
+
+dd {
+  padding-block-end: var(--space-3);
+}
+
+@container (min-width: 36rem) {
+  dl {
+    display: grid;
+    grid-template-columns: minmax(10rem, 16rem) minmax(0, 1fr);
+    column-gap: var(--space-5);
+  }
+
+  dt,
+  dd {
+    padding-block: var(--space-3);
+    border-block-start: var(--border-width) solid var(--color-rule);
+  }
+}
+
+/* ---------- Footer ---------- */
+footer {
+  margin-block-start: var(--space-section);
+  padding-block: var(--space-6) calc(var(--space-6) + env(safe-area-inset-bottom));
+  border-block-start: var(--border-width) solid var(--color-rule);
+}
+
+footer p {
+  margin-block-end: var(--space-3);
+}
+
+footer ul {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: var(--space-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+footer li {
+  margin: 0;
+}
+
+footer a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target-size);
+}
+
+/* ---------- 600px and up ---------- */
+@media (min-width: 37.5em) {
+  .actions {
+    flex-direction: row;
+    align-self: auto;
+  }
+
+  .contents ul {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ---------- 900px and up ---------- */
+@media (min-width: 56.25em) {
+  html {
+    scroll-padding-top: calc(var(--header-height) + var(--space-4));
+  }
+
+  header {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 50;
+    flex-wrap: nowrap;
+    min-height: var(--header-height);
+    padding-block: 0;
+  }
+
+  header nav {
+    order: 2;
+    flex-basis: auto;
+  }
+
+  header nav a {
+    font-size: var(--text-base);
+  }
+
+  .theme-toggle {
+    order: 3;
+  }
+
+  main > .hero {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: var(--space-7);
+    align-items: center;
+    padding: var(--space-7);
+  }
+
+  .hero img {
+    grid-row: 1 / span 4;
+    margin: 0;
+  }
+
+  .hero > :not(img) {
+    grid-column: 2;
+  }
+}
+
+/* ---------- 1200px and up: sticky contents beside the text ---------- */
+@media (min-width: 75em) {
+  main {
+    display: grid;
+    grid-template-columns: 14.5rem minmax(0, 1fr);
+    column-gap: var(--space-7);
+  }
+
+  main > .hero {
+    grid-column: 1 / -1;
+  }
+
+  main > search,
+  main > section:not(.hero) {
+    grid-column: 2;
+  }
+
+  .contents {
+    grid-column: 1;
+    grid-row: 2 / span 12;
+    align-self: start;
+    position: sticky;
+    inset-block-start: calc(var(--header-height) + var(--space-5));
+    max-height: calc(100vh - var(--header-height) - var(--space-7));
+    overflow-y: auto;
+  }
+
+  .contents ul {
+    grid-template-columns: 1fr;
+  }
+}

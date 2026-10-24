@@ -11,6 +11,7 @@
   <link rel="canonical" href="https://samoff.com/sentinel/">
   <link rel="preload" href="fonts/AtkinsonHyperlegibleNext-Variable.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/styles.css">
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Sentinel">
@@ -55,8 +56,8 @@
       <p class="version">Version 1.4.0</p>
       <p class="tagline">Rigorous, repeatable quality gates for any AI coding agent, any project, any language.</p>
       <p class="actions">
-        <a href="#installation">Install</a>
-        <a href="https://github.com/timsamoff/Sentinel">View on GitHub</a>
+        <a class="button" href="#installation">Install</a>
+        <a class="button button-secondary" href="https://github.com/timsamoff/Sentinel">View on GitHub</a>
       </p>
     </section>
 
@@ -119,7 +120,7 @@
     <section id="the-prompts" aria-labelledby="the-prompts-title">
       <h2 id="the-prompts-title">The prompts</h2>
       <p><code>sentinel-init.md</code> runs the four stages below in order. It is the recommended way to use the suite. It is unnumbered because it is a wrapper, not a fifth stage.</p>
-      <ol start="0">
+      <ol class="sequence" role="list" start="0">
         <li><code>00-project-discovery.md</code> detects the project's stack, surfaces, and conventions, and asks you for what it can't detect. It produces <code>PROJECT_PROFILE.md</code>, which the later prompts read. On a blank or nearly empty project, it asks you directly instead of inferring.</li>
         <li><code>01-design-quality-audit.md</code> audits code quality and, where there is a user interface, design consistency: color and spacing systems, responsive layout, accessibility, and whether the interface looks generic or machine-made. It also checks for a design document or offers to create one. It makes small, low-risk cleanups and reports everything else.</li>
         <li><code>02-integration-audit.md</code> reads the project's history to find every place a new feature has needed to touch, including places that were missed. It produces <code>INTEGRATION_CHECKLIST.md</code> and proposes gate checks without building them.</li>
@@ -252,7 +253,7 @@
     <section id="license" aria-labelledby="license-title">
       <h2 id="license-title">License</h2>
       <p>MIT. See <a href="https://github.com/timsamoff/Sentinel/blob/main/LICENSE"><code>LICENSE</code></a>. You may use, modify, and redistribute these prompts freely, including in closed-source or commercial work, as long as the original copyright notice is kept.</p>
-      <p><a href="https://www.paypal.com/paypalme/timsamoff" rel="noopener">Support this project</a></p>
+      <p><a class="button button-secondary" href="https://www.paypal.com/paypalme/timsamoff" rel="noopener">Support this project</a></p>
     </section>
   </main>
 
