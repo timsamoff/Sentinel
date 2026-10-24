@@ -222,7 +222,7 @@
     clearButton.hidden = false;
     announce(results
       ? plural(results, 'result') + ' in ' + plural(sectionCount, 'section') + '.'
-      : 'No results for "' + query.trim() + '".');
+      : 'No results for \u201C' + query.trim() + '\u201D.');
     tellOthers();
   }
 
