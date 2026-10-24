@@ -85,6 +85,7 @@
       <h2 id="what-it-does-title">What it does</h2>
       <p>Sentinel is a set of four prompts that give an AI coding agent a disciplined process for any code or design project. The agent learns what the project is, audits its code and design quality, maps every place a future change needs to touch, and then builds automated checks that hold those standards in place.</p>
       <p>Setup is the expensive part. The prompts read your actual codebase and history, which costs real time and tokens once. What you get in return is a pre-commit hook that checks only each commit's diff, plus a periodic full-repo scan for slower drift. Ordinary commits stay cheap.</p>
+      <p>Two terms come up often. A <dfn>hook</dfn> is a script your version control runs automatically at a set moment, such as just before a commit is saved. A <dfn>gate check</dfn> is an automated test of one of your project's rules. Some gate checks block a commit, and others only remind you.</p>
       <p>It is a guided setup, not a one-shot report. The agent will stop and ask about your preferences (commit style, comment philosophy, whether docs stay local or shared), and your answers become enforced rules. Treat those questions as real decisions.</p>
     </section>
 
@@ -96,6 +97,12 @@
 
     <section id="installation" aria-labelledby="installation-title">
       <h2 id="installation-title">Installation</h2>
+      <p>Three steps get you started:</p>
+      <ol>
+        <li>Copy the <code>Sentinel-Prompts/</code> folder into your project. The command below does it.</li>
+        <li>Start your agent from your project's root.</li>
+        <li>Tell it to read and run <code>Sentinel-Prompts/sentinel-init.md</code>. It starts the first stage and asks you questions as it goes.</li>
+      </ol>
       <p>This repo is a source to copy from, not a place to work. Copy the whole <code>Sentinel-Prompts/</code> folder into your project. Its location inside the project doesn't matter.</p>
       <p>The quickest way is this command, run from your project's root. It needs no git.</p>
       <div class="code-block">
@@ -189,7 +196,9 @@
 
       <details>
         <summary>Unfinished work survives the end of a session.</summary>
-        <p>The agent keeps <code>Sentinel-Notes/HANDOFF.md</code> current while it works: what's in progress, what failed, and the next steps in order. It rewrites the file as each step finishes, so closing the window or a crash loses at most the last step. Telling the agent you're done before you close still gives the most complete handoff. The next session reads it before anything else, then the open <code>TODO.md</code> items. If the handoff doesn't account for uncommitted changes, that session says it may be out of date. If your setup already uses a handoff file, the agent uses that one instead, and still writes the rules for it into <code>AGENTS.md</code>, since your personal configuration and the agent's own memory don't reach a cloud or remote session. The agent also records a short close-out (handoff, any log you keep, and any step that needs your approval) and ends it with one line saying what was done and what was skipped. If you sometimes work in remote sessions, it asks once, because those sessions see only what is committed to the repository. Where your tool can run a command at session start, prompt 3 offers a hook that puts the handoff in front of the agent automatically, so reading it doesn't depend on the agent remembering to.</p>
+        <p>The agent keeps <code>Sentinel-Notes/HANDOFF.md</code> current while it works: what's in progress, what failed, and the next steps in order. It rewrites the file as each step finishes, so closing the window or a crash loses at most the last step. Telling the agent you're done before you close still gives the most complete handoff. The next session reads it before anything else, then the open <code>TODO.md</code> items. If the handoff doesn't account for uncommitted changes, that session says it may be out of date.</p>
+        <p>If your setup already uses a handoff file, the agent uses that one instead, and still writes the rules for it into <code>AGENTS.md</code>, since your personal configuration and the agent's own memory don't reach a cloud or remote session.</p>
+        <p>The agent also records a short close-out (handoff, any log you keep, and any step that needs your approval) and ends it with one line saying what was done and what was skipped. If you sometimes work in remote sessions, it asks once, because those sessions see only what is committed to the repository. Where your tool can run a command at session start, prompt 3 offers a hook that puts the handoff in front of the agent automatically, so reading it doesn't depend on the agent remembering to.</p>
       </details>
     </section>
 
