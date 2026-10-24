@@ -220,7 +220,7 @@ pre {
 
 code {
   background: var(--color-surface);
-  padding: 0.1em 0.35em;
+  padding: 0.1em 0.25em;
   border-radius: var(--radius-sm);
   overflow-wrap: anywhere;
 }
