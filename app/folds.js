@@ -1,16 +1,18 @@
-// Open all / Close all for the folds in "What to expect".
+// Open all / Close all: each button row acts on the folds in its own section.
 (function () {
-  var controls = document.querySelector('.fold-controls');
-  var folds = [].slice.call(document.querySelectorAll('#what-to-expect details'));
+  var rows = [].slice.call(document.querySelectorAll('.fold-controls'));
 
-  if (!controls || !folds.length) return;
+  rows.forEach(function (controls) {
+    var folds = [].slice.call(controls.closest('section').querySelectorAll('details'));
+    if (!folds.length) return;
 
-  controls.addEventListener('click', function (event) {
-    var button = event.target.closest('button[data-fold-action]');
-    if (!button) return;
-    var open = button.getAttribute('data-fold-action') === 'open';
-    folds.forEach(function (fold) { fold.open = open; });
+    controls.addEventListener('click', function (event) {
+      var button = event.target.closest('button[data-fold-action]');
+      if (!button) return;
+      var open = button.getAttribute('data-fold-action') === 'open';
+      folds.forEach(function (fold) { fold.open = open; });
+    });
+
+    controls.hidden = false;
   });
-
-  controls.hidden = false;
 })();
