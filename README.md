@@ -24,11 +24,11 @@
 
 ## What it does
 
-Sentinel is a set of four prompts that give an AI coding agent a disciplined process for any code or design project. The agent learns what the project is, audits its code and design quality, and maps every place a future change needs to touch. Then it builds automated checks that hold those standards in place.
+Sentinel is a set of four prompts that give an AI coding agent a structured process for any code or design project. The agent learns what the project is, audits its code and design quality, and maps every place a future change needs to touch. It then builds automated checks that hold those standards in place.
 
-Setup is the expensive part. The prompts read your actual codebase and history, which costs real time and tokens once. What you get in return is a pre-commit hook that checks only each commit's diff, plus a periodic full-repo scan for slower drift. Ordinary commits stay cheap.
+Setup is the expensive part. The prompts read your actual codebase and history, which costs time and tokens once. In return, you get a pre-commit hook that checks only each commit's diff, plus a periodic full-repo scan for slower drift, so ordinary commits stay cheap.
 
-It is a guided setup. The agent will stop and ask about your preferences (commit style, comment philosophy, whether docs stay local or shared), and your answers become enforced rules. Treat those questions as real decisions.
+Setup is guided. The agent stops and asks about your preferences (commit style, comment philosophy, whether docs stay local or shared), and your answers become enforced rules. Treat those questions as real decisions.
 
 ## Requirements
 
