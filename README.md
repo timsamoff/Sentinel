@@ -7,6 +7,8 @@
 
 ***Rigorous, repeatable quality gates for any AI coding agent, any project, any language.***
 
+🌐 **[View the Sentinel website](https://samoff.com/Sentinel/)**
+
 ### Contents
 
 - [What it does](#what-it-does)
