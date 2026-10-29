@@ -1,6 +1,6 @@
 # Sentinel: Integration Audit Prompt (Portable — for any AI coding agent, any project)
 
-**Version 1.5.1**
+**Version 1.6.0**
 
 Paste this to your AI coding agent as its own session/task, separate from feature work. Before using it on a new project, fill in the `[PROJECT-SPECIFIC]` bracket below with that project's real subsystems — this template deliberately leaves it unfilled rather than guessing for you. If you skip this, the agent will typically infer something reasonable from the actual codebase, but a value you've deliberately confirmed is more reliable than one inferred in the moment with nobody reviewing it (see note at the end).
 

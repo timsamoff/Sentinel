@@ -3,7 +3,7 @@
 
 # Sentinel
 
-**Version 1.5.1**
+**Version 1.6.0**
 
 ***Rigorous, repeatable quality gates for any AI coding agent, any project, any language.***
 
@@ -81,6 +81,8 @@ The manual command is also used for any Sentinel output you choose to keep out o
 Once a design document exists, it gets two checks. One is a per-commit quality gate for architecturally significant changes. The other is an occasional review, tied to releases, that confirms its content is still true.
 
 **Design checks adapt to the project.** A full graphical interface (web, mobile, desktop, or game) gets the complete design audit. A presentational surface without a GUI, such as a CLI's color scheme, gets the parts that apply. A backend service or library gets only the code-quality section.
+
+**Sentinel checks for updates.** At the start of each `sentinel-init.md` run, the agent reads one line from GitHub to see whether a newer version exists. If one does, it asks whether to update now, wait, or skip that version. Updating downloads the prompt files and starts an update run in prompt 0. If the agent can't reach GitHub, it skips the check without comment. Prompts run individually don't check.
 
 **New kinds of work don't need a full re-run.** If you add something with no precedent in the project, name it and ask what covers it. The agent points you to the right prompt and section.
 
