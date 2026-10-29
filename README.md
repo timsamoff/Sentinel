@@ -118,11 +118,11 @@ Where your tool can run a command at session start, prompt 3 offers a hook. The 
 
 ## Upgrading
 
+Before starting, copy the new `Sentinel-Prompts/` folder over the old one.
+
 Running a newer version of Sentinel on a project it has already touched is treated as an update. Prompt 0 compares the version recorded in `PROJECT_PROFILE.md` with the current one, flags renamed conventions, and tells prompt 3 to re-validate the existing hook.
 
 A hook built under an older version can carry bugs that later versions fixed in the prompt text. An update isn't complete until the hook has been re-checked.
-
-Copy the new `Sentinel-Prompts/` folder over the old one before starting.
 
 With `sentinel-init.md`, you don't need to work out which prompts to re-run. It runs prompt 0 and follows its recommendation.
 

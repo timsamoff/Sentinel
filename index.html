@@ -307,9 +307,9 @@
 
     <section id="upgrading">
       <h2>Upgrading</h2>
+      <p>Before starting, copy the new <code>Sentinel-Prompts/</code> folder over the old one.</p>
       <p>Running a newer version of Sentinel on a project it has already touched is treated as an update. Prompt 0 compares the version recorded in <code>PROJECT_PROFILE.md</code> with the current one, flags renamed conventions, and tells prompt 3 to re-validate the existing hook.</p>
       <p>A hook built under an older version can carry bugs that later versions fixed in the prompt text. An update isn’t complete until the hook has been re-checked.</p>
-      <p>Copy the new <code>Sentinel-Prompts/</code> folder over the old one before starting.</p>
       <p>With <code>sentinel-init.md</code>, you don’t need to work out which prompts to re-run. It runs prompt 0 and follows its recommendation.</p>
       <details>
         <summary>How version numbers work.</summary>
