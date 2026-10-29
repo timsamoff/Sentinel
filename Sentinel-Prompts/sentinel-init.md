@@ -1,6 +1,6 @@
 # Sentinel: Init (Portable — runs 00 through 03 in sequence)
 
-**Version 1.6.0**
+**Version 1.6.1**
 
 This is a thin orchestrator, not a fifth prompt with its own logic. It exists to remove the friction of manually pasting four separate files one at a time — it does not change what any of them do, and it does not collapse or skip the review checkpoints each one already has. If you'd rather run the four prompts individually, or jump into the middle of the sequence, use them directly; this file is a convenience wrapper around the exact same process.
 
@@ -18,7 +18,7 @@ You are running the full Sentinel sequence against this project, one prompt at a
 
 ### Step 0 — Check for a newer version
 
-Before Step 1, follow "Before Part 0 — Check for a newer version, and apply it if the user agrees" in `00-project-discovery.md`. It runs once per run of this file. If the user updates, that section ends by sending you back to the top of the new `sentinel-init.md`; don't continue from this copy.
+Before Step 1, follow "Before Part 0 — Check for a newer version, and apply it if the user agrees" in `00-project-discovery.md`. It runs once per run of this file. If the user updates, that section ends by sending you back to the top of the new `sentinel-init.md`. Skip Step 0 there, since the check already ran, and don't continue from this copy.
 
 ### Step 1 — Run `00-project-discovery.md` in full
 

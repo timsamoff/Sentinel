@@ -1,6 +1,6 @@
 # Sentinel: Project Discovery Prompt (Portable — run first, before 01)
 
-**Version 1.6.0**
+**Version 1.6.1**
 
 Run this once, before the Design & Code Quality Audit. It's read-only against your codebase except for producing one file (`PROJECT_PROFILE.md`) — it detects what it reasonably can, asks you directly for what it can't, and hands the result to the two other prompts that have `[PROJECT-SPECIFIC]` brackets (Design & Code Quality Audit and Integration Audit) so those brackets don't have to be filled in by hand. The Quality Gate Implementation prompt has no brackets of its own, but can still reuse this profile's "existing automation" finding instead of re-detecting it from scratch. Re-run this if the project changes significantly (new surface added, major restructure), or if you've updated to a newer version of these prompts — see the update-detection note below — rather than trusting a stale profile.
 
@@ -31,10 +31,10 @@ This is the only place the suite uses the network. Run it when `sentinel-init.md
 **Apply the update** (when the user says update now):
 
 1. If `Sentinel-Prompts/` is tracked by git and `git status --porcelain Sentinel-Prompts` shows local changes, say so and ask before replacing anything. If it isn't tracked, say the update replaces the prompt files.
-2. Download the new `sentinel-init.md` into a temporary folder, then download every prompt file it lists under its own "Requires" sentence from the same folder on GitHub. Take the list from the new file, not the installed one, since file names can change between versions.
+2. Download the new `sentinel-init.md` into a temporary folder beside `Sentinel-Prompts/` (for example, `Sentinel-Prompts.tmp/`), then download every prompt file it lists under its own "Requires" sentence from the same folder on GitHub. Take the list from the new file, not the installed one, since file names can change between versions.
 3. Check that every file downloaded, isn't empty, and has the new version on line 3. If any check fails, delete the temporary folder, tell the user in one line that the update didn't complete, and carry on with the installed prompts.
 4. Replace the installed files with the downloaded ones and delete the temporary folder. Apply the leftover-file check in Part 0.
-5. Stop following the installed copies. If this started from `sentinel-init.md`, read the new `sentinel-init.md` from disk and follow it from the top. If this prompt was running on its own, read the new copy of this prompt and follow it from the top. Prompt 0 then treats the run as an update run, because `PROJECT_PROFILE.md` records the older version.
+5. Stop following the installed copies. If this started from `sentinel-init.md`, read the new `sentinel-init.md` from disk and follow it from the top, skipping its Step 0, since this check already ran. If this prompt was running on its own, read the new copy of this prompt and follow it from the top, skipping this section for the same reason. Prompt 0 then treats the run as an update run, because `PROJECT_PROFILE.md` records the older version.
 6. If the update started from the session-start hook rather than a run, tell the user the update is installed and offer to run `sentinel-init.md` to bring the project up to date. Don't start it unasked.
 
 ### Part 0 — Detect a fresh run vs. an update run
@@ -54,6 +54,10 @@ Before anything else, check whether `PROJECT_PROFILE.md` already exists. If it d
 - **Standing notes and conventions.** These only add or correct text in `AGENTS.md`. Apply them directly from the named Part, without re-running that whole prompt; a full audit to land one paragraph wastes the user's time.
 - **Quality-gate changes.** These change what the hook or manual command should do. They fall under the re-validation flag above: list them for `03`, which re-checks the existing implementation against them.
 - **Run-time only.** These change how the prompts behave while running and leave nothing in the project. Mention them briefly; there's nothing to apply.
+
+*1.6.1 (changes since 1.6.0):*
+
+- Run-time only: the update steps now say where the temporary download folder goes and that the new copy skips its update check after an update restart. Nothing in the project changes.
 
 *1.6.0 (changes since 1.5.2):*
 
@@ -160,7 +164,7 @@ Produce `PROJECT_PROFILE.md` at the project root containing every value gathered
 - VCS status, commit/contributor counts, and any detected commit-message convention
 - Version/release status
 - Existing automation detected, and whether it looks like a pre-existing quality-gate system specifically
-- Sentinel version (1.6.0), and whether this was a fresh run or an update run — if an update, from which prior version, and whether an existing quality-gate hook needs re-validation as a result
+- Sentinel version (1.6.1), and whether this was a fresh run or an update run — if an update, from which prior version, and whether an existing quality-gate hook needs re-validation as a result
 - Whether this was a blank/near-empty project run (per Part 0a), and which fields were deferred as a result rather than evaluated-and-empty
 - Which of AGENTS.md / README / LICENSE / .gitignore / Sentinel-Notes/ / scratch/ already exist
 - Path to an existing design document, if one was found (or "none found")

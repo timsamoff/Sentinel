@@ -1,6 +1,6 @@
 # Sentinel: Quality Gate Implementation Prompt (Portable — for any AI coding agent, any project)
 
-**Version 1.6.0**
+**Version 1.6.1**
 
 This prompt is the one that actually implements — the prior two deliberately stop at "propose and wait for review." Confirm with the user that the proposals have been reviewed and approved before running this, if that hasn't already happened.
 
