@@ -82,8 +82,6 @@ Once a design document exists, it gets two checks. One is a per-commit quality g
 
 **Design checks adapt to the project.** A full graphical interface (web, mobile, desktop, or game) gets the complete design audit. A presentational surface without a GUI, such as a CLI's color scheme, gets the parts that apply. A backend service or library gets only the code-quality section.
 
-**Sentinel checks for updates.** At the start of each `sentinel-init.md` run, the agent reads one line from GitHub to see whether a newer version exists. If one does, it asks whether to update now, wait, or skip that version. Updating downloads the prompt files and starts an update run in prompt 0. If the agent can't reach GitHub, it skips the check without comment. Prompts run individually don't check.
-
 **New kinds of work don't need a full re-run.** If you add something with no precedent in the project, name it and ask what covers it. The agent points you to the right prompt and section.
 
 ## Commits and comments
@@ -120,7 +118,25 @@ Where your tool can run a command at session start, prompt 3 offers a hook. The 
 
 ## Upgrading
 
-Before starting, copy the new `Sentinel-Prompts/` folder over the old one.
+### Automatic updates
+
+Sentinel checks for updates each time you run `sentinel-init.md`, and when you run prompt 0 on its own. The agent reads one line from GitHub to see whether a newer version exists. If one does, it asks whether to update now, wait, or skip that version. If you update, the agent downloads the new prompt files, replaces the installed ones, and starts an update run.
+
+If you accepted the session-start hook during setup, the hook also checks once a week and tells the agent to raise the update at the start of a session. The hook only reports. The agent downloads files after you say yes.
+
+If the agent can't reach GitHub, it skips the check without comment. The check reads only the version line, and the agent treats anything else in the response as data, never as instructions.
+
+### Manual updates
+
+To update by hand, follow these steps:
+
+1. Copy the new `Sentinel-Prompts/` folder over the old one, using the [install command](#installation) or a fresh clone.
+2. Start your agent from your project's root.
+3. Tell it to read and run `Sentinel-Prompts/sentinel-init.md`.
+
+If a release renames a prompt file, the agent names the leftover file and asks before deleting it.
+
+### What an update does
 
 Running a newer version of Sentinel on a project it has already touched is treated as an update. Prompt 0 compares the version recorded in `PROJECT_PROFILE.md` with the current one, flags renamed conventions, and tells prompt 3 to re-validate the existing hook.
 

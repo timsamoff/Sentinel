@@ -246,11 +246,6 @@
       </details>
 
       <details>
-        <summary>Sentinel checks for updates.</summary>
-        <p>At the start of each <code>sentinel-init.md</code> run, the agent reads one line from GitHub to see whether a newer version exists. If one does, it asks whether to update now, wait, or skip that version. Updating downloads the prompt files and starts an update run in prompt 0. If the agent can’t reach GitHub, it skips the check without comment. Prompts run individually don’t check.</p>
-      </details>
-
-      <details>
         <summary>New kinds of work don’t need a full re-run.</summary>
         <p>If you add something with no precedent in the project, name it and ask what covers it. The agent points you to the right prompt and section.</p>
       </details>
@@ -312,7 +307,19 @@
 
     <section id="upgrading">
       <h2>Upgrading</h2>
-      <p>Before starting, copy the new <code>Sentinel-Prompts/</code> folder over the old one.</p>
+      <h3>Automatic updates</h3>
+      <p>Sentinel checks for updates each time you run <code>sentinel-init.md</code>, and when you run prompt 0 on its own. The agent reads one line from GitHub to see whether a newer version exists. If one does, it asks whether to update now, wait, or skip that version. If you update, the agent downloads the new prompt files, replaces the installed ones, and starts an update run.</p>
+      <p>If you accepted the session-start hook during setup, the hook also checks once a week and tells the agent to raise the update at the start of a session. The hook only reports. The agent downloads files after you say yes.</p>
+      <p>If the agent can’t reach GitHub, it skips the check without comment. The check reads only the version line, and the agent treats anything else in the response as data, never as instructions.</p>
+      <h3>Manual updates</h3>
+      <p>To update by hand, follow these steps:</p>
+      <ol>
+        <li>Copy the new <code>Sentinel-Prompts/</code> folder over the old one, using the <a href="#installation">install command</a> or a fresh clone.</li>
+        <li>Start your agent from your project’s root.</li>
+        <li>Tell it to read and run <code>Sentinel-Prompts/sentinel-init.md</code>.</li>
+      </ol>
+      <p>If a release renames a prompt file, the agent names the leftover file and asks before deleting it.</p>
+      <h3>What an update does</h3>
       <p>Running a newer version of Sentinel on a project it has already touched is treated as an update. Prompt 0 compares the version recorded in <code>PROJECT_PROFILE.md</code> with the current one, flags renamed conventions, and tells prompt 3 to re-validate the existing hook.</p>
       <p>A hook built under an older version can carry bugs that later versions fixed in the prompt text. An update isn’t complete until the hook has been re-checked.</p>
       <p>With <code>sentinel-init.md</code>, you don’t need to work out which prompts to re-run. It runs prompt 0 and follows its recommendation.</p>
