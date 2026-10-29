@@ -390,6 +390,21 @@ main > section > h2::before {
   font-weight: var(--weight-bold);
 }
 
+/* Prompt numbers in running text, matching the circles above. */
+.prompt-num {
+  display: inline-block;
+  min-width: 1.5em;
+  padding-inline: 0.35em;
+  background: var(--color-accent-fill);
+  color: var(--color-on-accent);
+  border: 1px solid transparent; /* shows in forced-colors mode */
+  border-radius: 999px;
+  font-size: 0.85em;
+  font-weight: var(--weight-bold);
+  line-height: 1.5;
+  text-align: center;
+}
+
 /* The thin rule that joins the circles, echoing the ribbon around the shield. */
 .sequence li:not(:last-child)::after {
   content: "";
