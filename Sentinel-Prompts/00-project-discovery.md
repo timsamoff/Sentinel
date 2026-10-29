@@ -1,6 +1,6 @@
 # Sentinel: Project Discovery Prompt (Portable — run first, before 01)
 
-**Version 1.5.0**
+**Version 1.5.1**
 
 Run this once, before the Design & Code Quality Audit. It's read-only against your codebase except for producing one file (`PROJECT_PROFILE.md`) — it detects what it reasonably can, asks you directly for what it can't, and hands the result to the two other prompts that have `[PROJECT-SPECIFIC]` brackets (Design & Code Quality Audit and Integration Audit) so those brackets don't have to be filled in by hand. The Quality Gate Implementation prompt has no brackets of its own, but can still reuse this profile's "existing automation" finding instead of re-detecting it from scratch. Re-run this if the project changes significantly (new surface added, major restructure), or if you've updated to a newer version of these prompts — see the update-detection note below — rather than trusting a stale profile.
 
@@ -31,6 +31,11 @@ Before anything else, check whether `PROJECT_PROFILE.md` already exists. If it d
 - **Standing notes and conventions.** These only add or correct text in `AGENTS.md`. Apply them directly from the named Part, without re-running that whole prompt; a full audit to land one paragraph wastes the user's time.
 - **Quality-gate changes.** These change what the hook or manual command should do. They fall under the re-validation flag above: list them for `03`, which re-checks the existing implementation against them.
 - **Run-time only.** These change how the prompts behave while running and leave nothing in the project. Mention them briefly; there's nothing to apply.
+
+*1.5.1 (changes since 1.5.0):*
+
+- Run-time only: terminology. "Gate check" is now "quality gate" throughout, and "stage" is now "prompt" in `sentinel-init.md`. The hook or manual command behaves the same, so there's nothing to re-validate. An existing `AGENTS.md` that says "gate check" still works; change the wording only if the user wants it to match.
+- Standing note: `03-gate-check-implementation.md` is now `03-quality-gate-implementation.md`. Copying the new `Sentinel-Prompts/` folder over an old one leaves both files, so have the user delete the old one. Already done if `Sentinel-Prompts/` has no `03-gate-check-implementation.md`. Point any note in `AGENTS.md` or `PROJECT_PROFILE.md` that names the old file at the new one.
 
 *1.5.0 (changes since 1.4.0):*
 
@@ -124,7 +129,7 @@ Produce `PROJECT_PROFILE.md` at the project root containing every value gathered
 - VCS status, commit/contributor counts, and any detected commit-message convention
 - Version/release status
 - Existing automation detected, and whether it looks like a pre-existing quality-gate system specifically
-- Sentinel version (1.5.0), and whether this was a fresh run or an update run — if an update, from which prior version, and whether an existing quality-gate hook needs re-validation as a result
+- Sentinel version (1.5.1), and whether this was a fresh run or an update run — if an update, from which prior version, and whether an existing quality-gate hook needs re-validation as a result
 - Whether this was a blank/near-empty project run (per Part 0a), and which fields were deferred as a result rather than evaluated-and-empty
 - Which of AGENTS.md / README / LICENSE / .gitignore / Sentinel-Notes/ / scratch/ already exist
 - Path to an existing design document, if one was found (or "none found")

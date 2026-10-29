@@ -3,7 +3,7 @@
 
 # Sentinel
 
-**Version 1.5.0**
+**Version 1.5.1**
 
 ***Rigorous, repeatable quality gates for any AI coding agent, any project, any language.***
 
