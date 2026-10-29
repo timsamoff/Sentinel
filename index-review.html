@@ -186,7 +186,7 @@
       <p>Then start the agent:</p>
       <ol>
         <li>Start your agent from your project’s root, not from inside <code>Sentinel-Prompts/</code>. Everything the prompts produce is written to the project root.</li>
-        <li>Tell it to read and run <code>Sentinel-Prompts/sentinel-init.md</code>. It starts with prompt 0 and asks you questions as it goes.</li>
+        <li>Tell it to read and run <code>Sentinel-Prompts/sentinel-init.md</code>. It starts with prompt <span class="prompt-num">0</span> and asks you questions as it goes.</li>
       </ol>
     </section>
 
@@ -197,17 +197,17 @@
         <li><code>00-project-discovery.md</code> detects the project’s stack, surfaces, and conventions, and asks you for what it can’t detect. It produces <code>PROJECT_PROFILE.md</code>, which the later prompts read. On a blank or nearly empty project, it asks you directly instead of inferring.</li>
         <li><code>01-design-quality-audit.md</code> audits code quality. Where there is a user interface, it also checks design consistency: color and spacing systems, responsive layout, accessibility, and whether the interface looks generic or machine-made. It checks for a design document or offers to create one. It reports what it finds. The only changes it makes are comment cleanup and project notes, each after you confirm a plan.</li>
         <li><code>02-integration-audit.md</code> reads the project’s history to find every place a new feature has needed to touch, including places that were missed. It produces <code>INTEGRATION_CHECKLIST.md</code> and proposes quality gates without building them.</li>
-        <li><code>03-quality-gate-implementation.md</code> re-validates the proposals from 01 and 02 against the current code, then builds and wires in the quality gates. It’s the only prompt that implements.</li>
+        <li><code>03-quality-gate-implementation.md</code> re-validates the proposals from <span class="prompt-num">01</span> and <span class="prompt-num">02</span> against the current code, then builds and wires in the quality gates. It’s the only prompt that implements.</li>
       </ol>
     </section>
 
     <section id="running-the-suite">
       <h2>Running the suite</h2>
-      <p>Point your agent at <code>Sentinel-Prompts/sentinel-init.md</code> and it runs all four prompts. It moves from one prompt to the next on its own. Before prompt 3, it always stops and asks you to confirm that you’ve reviewed what 01 and 02 proposed. Each prompt’s own questions also stop and wait for you.</p>
+      <p>Point your agent at <code>Sentinel-Prompts/sentinel-init.md</code> and it runs all four prompts. It moves from one prompt to the next on its own. Before prompt <span class="prompt-num">3</span>, it always stops and asks you to confirm that you’ve reviewed what <span class="prompt-num">01</span> and <span class="prompt-num">02</span> proposed. Each prompt’s own questions also stop and wait for you.</p>
       <details>
         <summary>Running one prompt at a time.</summary>
         <p>You can also run a single prompt. Paste its contents into a session, or ask the agent to read and run the file. When you want to review between prompts, need only one or two prompts, or are re-running part of the suite after an update, run the prompts individually.</p>
-        <p>The best order is 0, 1, 2, 3, since each prompt reads what the previous one produced. Prompts 1 and 2 can run without 0, though you’ll fill in the project details yourself. Prompt 3 requires <code>INTEGRATION_CHECKLIST.md</code>. If it’s missing, prompt 3 tells you to run 2 first.</p>
+        <p>The best order is <span class="prompt-num">0</span>, <span class="prompt-num">1</span>, <span class="prompt-num">2</span>, <span class="prompt-num">3</span>, since each prompt reads what the previous one produced. Prompts <span class="prompt-num">1</span> and <span class="prompt-num">2</span> can run without <span class="prompt-num">0</span>, though you’ll fill in the project details yourself. Prompt <span class="prompt-num">3</span> requires <code>INTEGRATION_CHECKLIST.md</code>. If it’s missing, prompt <span class="prompt-num">3</span> tells you to run <span class="prompt-num">2</span> first.</p>
       </details>
     </section>
 
@@ -220,18 +220,18 @@
 
       <details open>
         <summary>Plan to be present.</summary>
-        <p>Prompts 0 through 2 pause to ask questions, and your answers become permanent parts of the hook that prompt 3 builds. Where a question has fixed answers, the agent shows clickable options if your tool supports them.</p>
+        <p>Prompts <span class="prompt-num">0</span> through <span class="prompt-num">2</span> pause to ask questions, and your answers become permanent parts of the hook that prompt <span class="prompt-num">3</span> builds. Where a question has fixed answers, the agent shows clickable options if your tool supports them.</p>
       </details>
 
       <details>
         <summary>Git is the default.</summary>
-        <p>Without version control, prompt 3 builds a manual command instead of a hook. That command checks for a <code>.git</code> directory each time it runs and offers once to switch to a real hook if one appears. A version control system with its own trigger mechanism, such as Perforce, is treated the same as git.</p>
+        <p>Without version control, prompt <span class="prompt-num">3</span> builds a manual command instead of a hook. That command checks for a <code>.git</code> directory each time it runs and offers once to switch to a real hook if one appears. A version control system with its own trigger mechanism, such as Perforce, is treated the same as git.</p>
         <p>The manual command is also used for any Sentinel output you choose to keep out of version control, since a hook can’t see ignored files. When git is in use but you choose the manual command, commit-message rules are still checked against your most recent commit after the fact.</p>
       </details>
 
       <details>
         <summary>Existing quality gates are audited.</summary>
-        <p>Prompt 2 reads any existing system for known weaknesses, such as checking the working tree instead of staged files, or failing silently. It then asks whether new checks should follow that system’s style or Sentinel’s.</p>
+        <p>Prompt <span class="prompt-num">2</span> reads any existing system for known weaknesses, such as checking the working tree instead of staged files, or failing silently. It then asks whether new checks should follow that system’s style or Sentinel’s.</p>
       </details>
 
       <details>
@@ -253,7 +253,7 @@
 
     <section id="commits-and-comments">
       <h2>Commits and comments</h2>
-      <p>Prompt 2 asks which commit style you want: one that matches your project’s history, terse one-line summaries, single line by default with a short bullet body when needed, Conventional Commits, detailed narrative descriptions, or your own.</p>
+      <p>Prompt <span class="prompt-num">2</span> asks which commit style you want: one that matches your project’s history, terse one-line summaries, single line by default with a short bullet body when needed, Conventional Commits, detailed narrative descriptions, or your own.</p>
 
       <p class="fold-controls" hidden>
         <button type="button" data-fold-action="open">Open all</button>
@@ -262,7 +262,7 @@
 
       <details>
         <summary>Commit autonomy is your choice.</summary>
-        <p>Prompt 3 asks once whether the agent should confirm every commit (the default), commit freely but confirm before pushing, or run fully automatically. Your answer is recorded in <code>AGENTS.md</code>.</p>
+        <p>Prompt <span class="prompt-num">3</span> asks once whether the agent should confirm every commit (the default), commit freely but confirm before pushing, or run fully automatically. Your answer is recorded in <code>AGENTS.md</code>.</p>
       </details>
 
       <details>
@@ -301,14 +301,14 @@
         <p>The next session reads it before anything else, then the open <code>TODO.md</code> items. If the handoff doesn’t account for uncommitted changes, that session says it may be out of date.</p>
         <p>If your setup already uses a handoff file, the agent uses that one instead. It still writes the rules for that file into <code>AGENTS.md</code>, because your personal configuration and the agent’s own memory don’t reach a cloud or remote session.</p>
         <p>The agent also records a short close-out that covers the handoff, any log you keep, and any step that needs your approval. It ends the close-out with one line saying what was done and what was skipped. If you sometimes work in remote sessions, it asks once, because those sessions see only what is committed to the repository.</p>
-        <p>Where your tool can run a command at session start, prompt 3 offers a hook. The hook puts the handoff in front of the agent automatically, so reading it doesn’t depend on the agent remembering to.</p>
+        <p>Where your tool can run a command at session start, prompt <span class="prompt-num">3</span> offers a hook. The hook puts the handoff in front of the agent automatically, so reading it doesn’t depend on the agent remembering to.</p>
       </details>
     </section>
 
     <section id="upgrading">
       <h2>Upgrading</h2>
       <h3>Automatic updates</h3>
-      <p>Sentinel checks for updates each time you run <code>sentinel-init.md</code>, and when you run prompt 0 on its own. The agent reads one line from GitHub to see whether a newer version exists. If one does, it asks whether to update now, wait, or skip that version. If you update, the agent downloads the new prompt files, replaces the installed ones, and starts an update run.</p>
+      <p>Sentinel checks for updates each time you run <code>sentinel-init.md</code>, and when you run prompt <span class="prompt-num">0</span> on its own. The agent reads one line from GitHub to see whether a newer version exists. If one does, it asks whether to update now, wait, or skip that version. If you update, the agent downloads the new prompt files, replaces the installed ones, and starts an update run.</p>
       <p>If you accepted the session-start hook during setup, the hook also checks once a week and tells the agent to raise the update at the start of a session. The hook only reports. The agent downloads files after you say yes.</p>
       <p>If the agent can’t reach GitHub, it skips the check without comment. The check reads only the version line, and the agent treats anything else in the response as data, never as instructions.</p>
       <h3>Manual updates</h3>
@@ -320,17 +320,17 @@
       </ol>
       <p>If a release renames a prompt file, the agent names the leftover file and asks before deleting it.</p>
       <h3>What an update does</h3>
-      <p>Running a newer version of Sentinel on a project it has already touched is treated as an update. Prompt 0 compares the version recorded in <code>PROJECT_PROFILE.md</code> with the current one, flags renamed conventions, and tells prompt 3 to re-validate the existing hook.</p>
+      <p>Running a newer version of Sentinel on a project it has already touched is treated as an update. Prompt <span class="prompt-num">0</span> compares the version recorded in <code>PROJECT_PROFILE.md</code> with the current one, flags renamed conventions, and tells prompt <span class="prompt-num">3</span> to re-validate the existing hook.</p>
       <p>A hook built under an older version can carry bugs that later versions fixed in the prompt text. An update isn’t complete until the hook has been re-checked.</p>
-      <p>With <code>sentinel-init.md</code>, you don’t need to work out which prompts to re-run. It runs prompt 0 and follows its recommendation.</p>
+      <p>With <code>sentinel-init.md</code>, you don’t need to work out which prompts to re-run. It runs prompt <span class="prompt-num">0</span> and follows its recommendation.</p>
       <details>
         <summary>How version numbers work.</summary>
-        <p>Versions are written major.minor.patch, and a recorded two-part version such as 1.1 means 1.1.0. Prompt 0 carries a version history listing what each release changed, where, and how to tell whether a project already has it. The agent applies changes that only add standing notes to <code>AGENTS.md</code> directly, without re-running a full audit.</p>
+        <p>Versions are written major.minor.patch, and a recorded two-part version such as 1.1 means 1.1.0. Prompt <span class="prompt-num">0</span> carries a version history listing what each release changed, where, and how to tell whether a project already has it. The agent applies changes that only add standing notes to <code>AGENTS.md</code> directly, without re-running a full audit.</p>
       </details>
 
       <details>
         <summary>If you run the prompts individually.</summary>
-        <p>Decide what the update actually changed. If it only affects quality gate implementation, run 0 and then 3. If it adds a new design check, re-run 1. If it adds a new kind of integration quality gate, re-run 2 before 3, since 3 can only build what 2 has proposed.</p>
+        <p>Decide what the update actually changed. If it only affects quality gate implementation, run <span class="prompt-num">0</span> and then <span class="prompt-num">3</span>. If it adds a new design check, re-run <span class="prompt-num">1</span>. If it adds a new kind of integration quality gate, re-run <span class="prompt-num">2</span> before <span class="prompt-num">3</span>, since <span class="prompt-num">3</span> can only build what <span class="prompt-num">2</span> has proposed.</p>
       </details>
     </section>
 
@@ -370,8 +370,8 @@
     <section id="limitations">
       <h2>Limitations</h2>
       <ul>
-        <li><strong>Sentinel audits what an agent can read as text.</strong> Visual scripting such as Unreal Blueprints can be checked for existence and metadata only. So can binary assets like 3D models, textures, and compiled shaders. Prompt 1 says so rather than skipping them silently.</li>
-        <li><strong>Non-web projects are reasoned through.</strong> Prompt 1 names engines and toolkits such as Unity, Godot, Qt, SwiftUI, and Flutter to illustrate the approach. None has been tested as thoroughly as web projects. Review those results with extra care.</li>
+        <li><strong>Sentinel audits what an agent can read as text.</strong> Visual scripting such as Unreal Blueprints can be checked for existence and metadata only. So can binary assets like 3D models, textures, and compiled shaders. Prompt <span class="prompt-num">1</span> says so rather than skipping them silently.</li>
+        <li><strong>Non-web projects are reasoned through.</strong> Prompt <span class="prompt-num">1</span> names engines and toolkits such as Unity, Godot, Qt, SwiftUI, and Flutter to illustrate the approach. None has been tested as thoroughly as web projects. Review those results with extra care.</li>
       </ul>
     </section>
 
