@@ -43,56 +43,58 @@ This repo is a source to copy from. Copy the whole `Sentinel-Prompts/` folder in
 The quickest way is this command, run from your project's root. It needs no git.
 
 ```
-mkdir -p Sentinel-Prompts && cd Sentinel-Prompts && for f in 00-project-discovery.md 01-design-quality-audit.md 02-integration-audit.md 03-gate-check-implementation.md sentinel-init.md; do curl -sO "https://raw.githubusercontent.com/timsamoff/Sentinel/main/Sentinel-Prompts/$f"; done && cd ..
+mkdir -p Sentinel-Prompts && cd Sentinel-Prompts && for f in 00-project-discovery.md 01-design-quality-audit.md 02-integration-audit.md 03-quality-gate-implementation.md sentinel-init.md; do curl -sO "https://raw.githubusercontent.com/timsamoff/Sentinel/main/Sentinel-Prompts/$f"; done && cd ..
 ```
 
-If you don't have `curl`, replace `curl -sO` with `wget -q`. You can also clone this repo, copy the folder out, and delete the clone.
+If you don't have `curl`, replace `curl -sO` with `wget -q`. If you'd rather not run a command, clone this repo, copy the folder out, and delete the clone.
 
-Always start your agent from your project's root, not from inside `Sentinel-Prompts/`. Everything the prompts produce is written to the project root.
+Start your agent from your project's root, not from inside `Sentinel-Prompts/`. Everything the prompts produce is written to the project root.
 
 ## The prompts
 
-- **`sentinel-init.md`** runs the four stages in order. It is the recommended way to use the suite. It is unnumbered because it is a wrapper.
+- **`sentinel-init.md`** runs the four prompts in order. It's the recommended way to use the suite, and it's unnumbered because it's a wrapper.
 - **`00-project-discovery.md`** detects the project's stack, surfaces, and conventions, and asks you for what it can't detect. It produces `PROJECT_PROFILE.md`, which the later prompts read. On a blank or nearly empty project, it asks you directly instead of inferring.
-- **`01-design-quality-audit.md`** audits code quality. Where there is a user interface, it also checks design consistency: color and spacing systems, responsive layout, accessibility, and whether the interface looks generic or machine-made. It checks for a design document or offers to create one. It makes small, low-risk cleanups and reports everything else.
-- **`02-integration-audit.md`** reads the project's history to find every place a new feature has needed to touch, including places that were missed. It produces `INTEGRATION_CHECKLIST.md` and proposes gate checks without building them.
-- **`03-gate-check-implementation.md`** re-validates the proposals from 01 and 02 against the current code, then builds and wires in the checks. It is the only prompt that implements.
+- **`01-design-quality-audit.md`** audits code quality. Where there is a user interface, it also checks design consistency: color and spacing systems, responsive layout, accessibility, and whether the interface looks generic or machine-made. It checks for a design document or offers to create one. It reports what it finds. The only changes it makes are comment cleanup and project notes, each after you confirm a plan.
+- **`02-integration-audit.md`** reads the project's history to find every place a new feature has needed to touch, including places that were missed. It produces `INTEGRATION_CHECKLIST.md` and proposes quality gates without building them.
+- **`03-quality-gate-implementation.md`** re-validates the proposals from 01 and 02 against the current code, then builds and wires in the quality gates. It's the only prompt that implements.
 
 ## Running the suite
 
-Point your agent at `Sentinel-Prompts/sentinel-init.md` and it will run all four stages. It moves from one stage to the next on its own. Before stage 3, it always stops and asks you to confirm you have reviewed what 01 and 02 proposed. Each stage's own questions also stop and wait for you.
+Point your agent at `Sentinel-Prompts/sentinel-init.md` and it runs all four prompts. It moves from one prompt to the next on its own. Before prompt 3, it always stops and asks you to confirm that you've reviewed what 01 and 02 proposed. Each prompt's own questions also stop and wait for you.
 
-You can also run a single prompt. Paste its contents into a session, or ask the agent to read and run the file. When you want to review between stages, need only one or two prompts, or are re-running part of the suite after an update, run the prompts individually.
+You can also run a single prompt. Paste its contents into a session, or ask the agent to read and run the file. When you want to review between prompts, need only one or two prompts, or are re-running part of the suite after an update, run the prompts individually.
 
-The best order is 0, 1, 2, 3, since each stage reads what the previous one produced. Prompts 1 and 2 can run without 0, though you'll fill in the project details yourself. Prompt 3 requires `INTEGRATION_CHECKLIST.md`. If it's missing, prompt 3 tells you to run 2 first.
+The best order is 0, 1, 2, 3, since each prompt reads what the previous one produced. Prompts 1 and 2 can run without 0, though you'll fill in the project details yourself. Prompt 3 requires `INTEGRATION_CHECKLIST.md`. If it's missing, prompt 3 tells you to run 2 first.
 
 ## What to expect
 
-**Plan to be present.** Prompts 0 through 2 pause to ask questions, and your answers become permanent parts of the hook that prompt 3 builds. Where a question has fixed answers, the agent will show clickable options if your tool supports them.
+**Plan to be present.** Prompts 0 through 2 pause to ask questions, and your answers become permanent parts of the hook that prompt 3 builds. Where a question has fixed answers, the agent shows clickable options if your tool supports them.
 
 **Git is the default.** Without version control, prompt 3 builds a manual command instead of a hook. That command checks for a `.git` directory each time it runs and offers once to switch to a real hook if one appears. A version control system with its own trigger mechanism, such as Perforce, is treated the same as git.
 
 The manual command is also used for any Sentinel output you choose to keep out of version control, since a hook can't see ignored files. When git is in use but you choose the manual command, commit-message rules are still checked against your most recent commit after the fact.
 
-**Existing gate checks are audited.** Prompt 2 reads any existing system for known weaknesses, such as checking the working tree instead of staged files, or failing silently. It then asks whether new checks should follow that system's style or Sentinel's.
+**Existing quality gates are audited.** Prompt 2 reads any existing system for known weaknesses, such as checking the working tree instead of staged files, or failing silently. It then asks whether new checks should follow that system's style or Sentinel's.
 
 **A design document is offered.** If one exists, the audits check the code against it. If not, you're asked before one is created. A generated design document reads as ordinary documentation, but it won't state a rationale as fact without evidence.
 
-Once a design document exists, it gets two checks. One is a per-commit gate for architecturally significant changes. The other is an occasional review, tied to releases, that confirms its content is still true.
+Once a design document exists, it gets two checks. One is a per-commit quality gate for architecturally significant changes. The other is an occasional review, tied to releases, that confirms its content is still true.
 
 **Design checks adapt to the project.** A full graphical interface (web, mobile, desktop, or game) gets the complete design audit. A presentational surface without a GUI, such as a CLI's color scheme, gets the parts that apply. A backend service or library gets only the code-quality section.
 
-**New kinds of work don't need a full re-run.** If you add something with no precedent in the project, name it and ask what covers it. The agent will point you to the right prompt and section.
+**New kinds of work don't need a full re-run.** If you add something with no precedent in the project, name it and ask what covers it. The agent points you to the right prompt and section.
 
 ## Commits and comments
 
+Prompt 2 asks which commit style you want: one that matches your project's history, terse one-line summaries, single line by default with a short bullet body when needed, Conventional Commits, detailed narrative descriptions, or your own.
+
 **Commit autonomy is your choice.** Prompt 3 asks once whether the agent should confirm every commit (the default), commit freely but confirm before pushing, or run fully automatically. Your answer is recorded in `AGENTS.md`.
 
-**Commits read as yours.** Whatever style you pick, commit messages are written in your voice and describe the change. No "at the user's direction," no mentions of the agent or the session, and no trailers the agent makes up.
+**Commits read as yours.** Whatever style you pick, commit messages are written in your voice and describe the change. They never include phrases like "at the user's direction," mention the agent or the session, or carry trailers the agent made up.
 
 The hook rejects trailer-shaped lines that aren't on your allowed list, and a short list of agent-voice phrases. The phrase list is weaker than the trailer check and will miss wordings it doesn't contain, so the rule also lives in `AGENTS.md`.
 
-**The plain terse commit style means no body, ever.** The hook enforces this as a hard block. If a change is too broad for one honest subject line, split it into several commits.
+**Terse one-line summaries mean no body, ever.** If you pick this style, the hook blocks any commit with a body. If a change is too broad for one honest subject line, split it into several commits.
 
 **Single line by default, bullets when needed.** The subject line alone is the norm. A short bullet body is allowed only when a change has three or more separate parts, or a behavior change a later reader needs to know about.
 
@@ -116,28 +118,28 @@ Where your tool can run a command at session start, prompt 3 offers a hook. The 
 
 ## Upgrading
 
+Before starting, copy the new `Sentinel-Prompts/` folder over the old one.
+
 Running a newer version of Sentinel on a project it has already touched is treated as an update. Prompt 0 compares the version recorded in `PROJECT_PROFILE.md` with the current one, flags renamed conventions, and tells prompt 3 to re-validate the existing hook.
 
 A hook built under an older version can carry bugs that later versions fixed in the prompt text. An update isn't complete until the hook has been re-checked.
 
-Copy the new `Sentinel-Prompts/` folder over the old one before starting.
-
-With `sentinel-init.md`, you don't need to work out which stages to re-run. It runs prompt 0 and follows its recommendation.
+With `sentinel-init.md`, you don't need to work out which prompts to re-run. It runs prompt 0 and follows its recommendation.
 
 Versions are written major.minor.patch, and a recorded two-part version such as 1.1 means 1.1.0. Prompt 0 carries a version history listing what each release changed, where, and how to tell whether a project already has it. The agent applies changes that only add standing notes to `AGENTS.md` directly, without re-running a full audit.
 
-If you run the prompts individually, decide what the update actually changed. If it only affects gate-check implementation, run 0 and then 3. If it adds a new design check, re-run 1. If it adds a new integration gate category, re-run 2 before 3, since 3 can only build what 2 has proposed.
+Decide what the update actually changed. If it only affects quality gate implementation, run 0 and then 3. If it adds a new design check, re-run 1. If it adds a new kind of integration quality gate, re-run 2 before 3, since 3 can only build what 2 has proposed.
 
 ## What you end up with
 
 - **`PROJECT_PROFILE.md`:** the confirmed project context, including your agent's conventions.
-- **`AGENTS.md` or `CLAUDE.md`:** the project's authoritative internal record, kept current by the gate check.
+- **`AGENTS.md` or `CLAUDE.md`:** the project's authoritative internal record, kept current by the quality gates.
 - **A design document (optional):** a narrative overview, stored at the root by default or wherever the project already keeps docs.
 - **`Sentinel-Notes/`:** audit findings and a brief `TODO.md` with one line per item. Items that need more detail link to their own design brief file. It also holds `HANDOFF.md` while a session's work is unfinished.
 - **`scratch/`:** a git-ignored folder for throwaway verification scripts.
-- **`INTEGRATION_CHECKLIST.md`:** the touchpoint checklist and gate-check description.
+- **`INTEGRATION_CHECKLIST.md`:** the touchpoint checklist and a description of the quality gates.
 - **Exceptions:** a `sentinel-exceptions` file for documented, owned, expiring exceptions. If you choose it during setup, you also get a `Sentinel-Override: <reason>` commit trailer for one-off cases. Only you write it, never the agent. Both are deliberate acknowledgments.
-- **A `TODO.md` sync check:** a hard gate for items linked to a design brief, and a non-blocking reminder for everything else.
+- **A `TODO.md` sync check:** a blocking quality gate for items linked to a design brief, and a non-blocking reminder for everything else.
 - **The pre-commit hook itself:** stored in a tracked location so it survives a fresh clone, plus a full-repo scan run on a schedule or on push.
 - **A session-start hook (optional):** where your tool supports one, it shows the agent any open handoff at the start of every session.
 - **A new-file-category check:** flags the first file of a type the project hasn't used before, such as the first image or the first 3D model. It asks a few questions to route the file to the right audit.
@@ -146,7 +148,6 @@ If you run the prompts individually, decide what the update actually changed. If
 
 - **Sentinel audits what an agent can read as text.** Visual scripting such as Unreal Blueprints can be checked for existence and metadata only. So can binary assets like 3D models, textures, and compiled shaders. Prompt 1 says so rather than skipping them silently.
 - **Non-web projects are reasoned through.** Prompt 1 names engines and toolkits such as Unity, Godot, Qt, SwiftUI, and Flutter to illustrate the approach. None has been tested as thoroughly as web projects. Review those results with extra care.
-- **Only Claude Code and OpenAI Codex are confirmed compatible.** Other agents are expected to work but haven't been tested.
 
 ## License
 
