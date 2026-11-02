@@ -3,7 +3,7 @@
 
 # Sentinel
 
-**Version 1.6.1**
+**Version 1.7.0**
 
 ***Rigorous, repeatable quality gates for any AI coding agent, any project, any language.***
 
@@ -19,6 +19,7 @@
 - [What to expect](#what-to-expect)
 - [Commits and comments](#commits-and-comments)
 - [Sessions and handoffs](#sessions-and-handoffs)
+- [Maintainer guide](#maintainer-guide)
 - [Upgrading](#upgrading)
 - [What you end up with](#what-you-end-up-with)
 - [Limitations](#limitations)
@@ -26,7 +27,7 @@
 
 ## What it does
 
-Sentinel is a set of four prompts that give an AI coding agent a structured process for any code or design project. The agent learns what the project is, audits its code and design quality, and maps every place a future change needs to touch. It then builds automated checks that hold those standards in place.
+Sentinel is a set of four prompts, plus an optional fifth, that give an AI coding agent a structured process for any code or design project. The agent learns what the project is, audits its code and design quality, and maps every place a future change needs to touch. It then builds automated checks that hold those standards in place.
 
 Setup is the expensive part. The prompts read your actual codebase and history, which costs time and tokens once. In return, you get a pre-commit hook that checks only each commit's diff, plus a periodic full-repo scan for slower drift, so ordinary commits stay cheap.
 
@@ -45,7 +46,7 @@ This repo is a source to copy from. Copy the whole `Sentinel-Prompts/` folder in
 The quickest way is this command, run from your project's root. It needs no git.
 
 ```
-mkdir -p Sentinel-Prompts && cd Sentinel-Prompts && for f in 00-project-discovery.md 01-design-quality-audit.md 02-integration-audit.md 03-quality-gate-implementation.md sentinel-init.md; do curl -sO "https://raw.githubusercontent.com/timsamoff/Sentinel/main/Sentinel-Prompts/$f"; done && cd ..
+mkdir -p Sentinel-Prompts && cd Sentinel-Prompts && for f in 00-project-discovery.md 01-design-quality-audit.md 02-integration-audit.md 03-quality-gate-implementation.md 04-maintainer-guide.md sentinel-init.md; do curl -sO "https://raw.githubusercontent.com/timsamoff/Sentinel/main/Sentinel-Prompts/$f"; done && cd ..
 ```
 
 If you don't have `curl`, replace `curl -sO` with `wget -q`. If you'd rather not run a command, clone this repo, copy the folder out, and delete the clone.
@@ -54,15 +55,16 @@ Start your agent from your project's root, not from inside `Sentinel-Prompts/`. 
 
 ## The prompts
 
-- **`sentinel-init.md`** runs the four prompts in order. It's the recommended way to use the suite, and it's unnumbered because it's a wrapper.
+- **`sentinel-init.md`** runs the four prompts in order and offers the optional fifth. It's the recommended way to use the suite, and it's unnumbered because it's a wrapper.
 - **`00-project-discovery.md`** detects the project's stack, surfaces, and conventions, and asks you for what it can't detect. It produces `PROJECT_PROFILE.md`, which the later prompts read. On a blank or nearly empty project, it asks you directly instead of inferring.
 - **`01-design-quality-audit.md`** audits code quality. Where there is a user interface, it also checks design consistency: color and spacing systems, responsive layout, accessibility, and whether the interface looks generic or machine-made. It checks for a design document or offers to create one. It reports what it finds. The only changes it makes are comment cleanup and project notes, each after you confirm a plan.
 - **`02-integration-audit.md`** reads the project's history to find every place a new feature has needed to touch, including places that were missed. It produces `INTEGRATION_CHECKLIST.md` and proposes quality gates without building them.
 - **`03-quality-gate-implementation.md`** re-validates the proposals from 01 and 02 against the current code, then builds and wires in the quality gates. It's the only prompt that implements.
+- **`04-maintainer-guide.md`** is optional. It maintains a living reference for developers, documenting a project's scope, architecture, decisions, current state, and development progress. Its purpose is to preserve project knowledge, provide an up-to-date picture of the entire project, and make it easier to resume work after time away. You choose the level of documentation, from none to a comprehensive set of files. See [Maintainer guide](#maintainer-guide).
 
 ## Running the suite
 
-Point your agent at `Sentinel-Prompts/sentinel-init.md` and it runs all four prompts. It moves from one prompt to the next on its own. Before prompt 3, it always stops and asks you to confirm that you've reviewed what 01 and 02 proposed. Each prompt's own questions also stop and wait for you.
+Point your agent at `Sentinel-Prompts/sentinel-init.md` and it runs all four prompts. It moves from one prompt to the next on its own, and offers the optional maintainer guide after prompt 2. Before prompt 3, it always stops and asks you to confirm that you've reviewed what 01 and 02 proposed. Each prompt's own questions also stop and wait for you.
 
 You can also run a single prompt. Paste its contents into a session, or ask the agent to read and run the file. When you want to review between prompts, need only one or two prompts, or are re-running part of the suite after an update, run the prompts individually.
 
@@ -118,6 +120,12 @@ The agent also records a short close-out that covers the handoff, any log you ke
 
 Where your tool can run a command at session start, prompt 3 offers a hook. The hook puts the handoff in front of the agent automatically, so reading it doesn't depend on the agent remembering to.
 
+## Maintainer guide
+
+Prompt 4 is optional, and `sentinel-init.md` offers it once after prompt 2. It measures the project, reports the file and line counts, and recommends one of four choices: no guide, a one-page guide, a one-page guide that grows as commits touch new areas, or a full guide. For a large project or one with several apps, the full guide covers only the areas you choose.
+
+Two costs come with any guide. You review the first draft, and every later commit that changes covered code has to update the guide and add a progress entry too. The agent records that rule in `AGENTS.md` and proposes a quality gate for prompt 3 to build. The gate shows a reminder when a commit changes covered source without touching the guide, or blocks the commit if you choose that. It can see that the guide was touched, not that it's right, so you can run prompt 4 again at any time to verify every path, name, and command against the code.
+
 ## Upgrading
 
 ### Automatic updates
@@ -154,6 +162,7 @@ Decide what the update actually changed. If it only affects quality gate impleme
 
 - **`PROJECT_PROFILE.md`:** the confirmed project context, including your agent's conventions.
 - **`AGENTS.md` or `CLAUDE.md`:** the project's authoritative internal record, kept current by the quality gates.
+- **A maintainer guide (optional):** a `Sentinel-Maintainer-Guide/` folder that preserves project knowledge for developers, kept current by a rule in `AGENTS.md`.
 - **A design document (optional):** a narrative overview, stored at the root by default or wherever the project already keeps docs.
 - **`Sentinel-Notes/`:** audit findings and a brief `TODO.md` with one line per item. Items that need more detail link to their own design brief file. It also holds `HANDOFF.md` while a session's work is unfinished.
 - **`scratch/`:** a git-ignored folder for throwaway verification scripts.

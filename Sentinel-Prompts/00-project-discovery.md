@@ -1,6 +1,6 @@
 # Sentinel: Project Discovery Prompt (Portable — run first, before 01)
 
-**Version 1.6.1**
+**Version 1.7.0**
 
 Run this once, before the Design & Code Quality Audit. It's read-only against your codebase except for producing one file (`PROJECT_PROFILE.md`) — it detects what it reasonably can, asks you directly for what it can't, and hands the result to the two other prompts that have `[PROJECT-SPECIFIC]` brackets (Design & Code Quality Audit and Integration Audit) so those brackets don't have to be filled in by hand. The Quality Gate Implementation prompt has no brackets of its own, but can still reuse this profile's "existing automation" finding instead of re-detecting it from scratch. Re-run this if the project changes significantly (new surface added, major restructure), or if you've updated to a newer version of these prompts — see the update-detection note below — rather than trusting a stale profile.
 
@@ -31,7 +31,7 @@ This is the only place the suite uses the network. Run it when `sentinel-init.md
 **Apply the update** (when the user says update now):
 
 1. If `Sentinel-Prompts/` is tracked by git and `git status --porcelain Sentinel-Prompts` shows local changes, say so and ask before replacing anything. If it isn't tracked, say the update replaces the prompt files.
-2. Download the new `sentinel-init.md` into a temporary folder beside `Sentinel-Prompts/` (for example, `Sentinel-Prompts.tmp/`), then download every prompt file it lists under its own "Requires" sentence from the same folder on GitHub. Take the list from the new file, not the installed one, since file names can change between versions.
+2. Download the new `sentinel-init.md` into a temporary folder beside `Sentinel-Prompts/` (for example, `Sentinel-Prompts.tmp/`), then download every prompt file it lists under its own "Requires" sentence, and any optional file named right after it, from the same folder on GitHub. Take the list from the new file, not the installed one, since file names can change between versions.
 3. Check that every file downloaded, isn't empty, and has the new version on line 3. If any check fails, delete the temporary folder, tell the user in one line that the update didn't complete, and carry on with the installed prompts.
 4. Replace the installed files with the downloaded ones and delete the temporary folder. Apply the leftover-file check in Part 0.
 5. Stop following the installed copies. If this started from `sentinel-init.md`, read the new `sentinel-init.md` from disk and follow it from the top, skipping its Step 0, since this check already ran. If this prompt was running on its own, read the new copy of this prompt and follow it from the top, skipping this section for the same reason. Prompt 0 then treats the run as an update run, because `PROJECT_PROFILE.md` records the older version.
@@ -44,7 +44,7 @@ Before anything else, check whether `PROJECT_PROFILE.md` already exists. If it d
 - Compare the version recorded in the existing `PROJECT_PROFILE.md` against this prompt's own version (above). If the existing file has no version recorded at all, treat it as pre-1.0 — older than this versioning system, and the one case that needs the most thorough re-check rather than an incremental diff.
 - Check for known renamed conventions from older versions (e.g. a `production_notes/` folder, the pre-1.0 name for what's now `Sentinel-Notes/`) and flag it for the user rather than silently ignoring it as an unrelated folder or silently treating it as already migrated.
 - Check the folder these prompts live in for renamed prompt files. Today that is one: `03-gate-check-implementation.md` became `03-quality-gate-implementation.md` in 1.5.1. If the old file is still there, the folder was copied over an older install. Name the leftover file, say it has been replaced, and ask before deleting it, since the user may have edited it. Never run it. Add a line here whenever a prompt file is renamed or removed. Do this check on every run of this prompt, update run or not.
-- Keep any `Skipped update:` line that `sentinel-init.md` recorded in `PROJECT_PROFILE.md`, unless this run installed that version or a newer one.
+- Keep any `Skipped update:` line that `sentinel-init.md` recorded in `PROJECT_PROFILE.md`, unless this run installed that version or a newer one. Keep any `Maintainer guide:` line that `04-maintainer-guide.md` recorded, unchanged.
 - Record in `PROJECT_PROFILE.md` that this was an update run, from which version, and flag explicitly for the Quality Gate Implementation prompt that any existing quality-gate hook needs re-validation against the *current* version's requirements, not just left as-is — a hook built under an older version of these prompts can carry bugs that were already found and fixed in the prompt text but never reached the actual file. This is the highest-priority thing an update carries forward; don't let it get lost in the profile as just another field.
 - Use the version history below to work out what actually changed since the recorded version, and recommend re-running only what it names.
 - Don't re-ask questions whose answers are still recorded and still valid (the project name, the design/token file, the recurring unit of work) — only re-run Part 2's questions for things that are genuinely likely to have changed, or that the user wants to revisit.
@@ -54,6 +54,13 @@ Before anything else, check whether `PROJECT_PROFILE.md` already exists. If it d
 - **Standing notes and conventions.** These only add or correct text in `AGENTS.md`. Apply them directly from the named Part, without re-running that whole prompt; a full audit to land one paragraph wastes the user's time.
 - **Quality-gate changes.** These change what the hook or manual command should do. They fall under the re-validation flag above: list them for `03`, which re-checks the existing implementation against them.
 - **Run-time only.** These change how the prompts behave while running and leave nothing in the project. Mention them briefly; there's nothing to apply.
+
+*1.7.0 (changes since 1.6.1):*
+
+- Run-time only: a new optional prompt, `04-maintainer-guide.md`, writes and later verifies a guide for a human maintainer. Nothing runs it unless the user asks. Already present if `Sentinel-Prompts/` contains that file. The update downloads it with the rest.
+- Convention: a project that ran `04` has a `Maintainer guide:` line in `PROJECT_PROFILE.md` and a `Sentinel-Maintainer-Guide/` folder. Keep that line on an update run, and don't ask about the guide again unless the user brings it up. If `04` ran under 1.7.0 and the folder exists, mention that its verify run is available after code changes.
+- Standing note: when a guide exists, `AGENTS.md` carries the guide's update rule and a verification note (`04`, Part 5). Already present if `AGENTS.md` mentions `Sentinel-Maintainer-Guide/`.
+- Quality gate: a proposed check that flags covered source changes with no guide change (`04`, Part 5), built by `03` from `INTEGRATION_CHECKLIST.md`. Applies only to projects that have a guide. Already present if the hook or manual command mentions the guide folder. If the guide exists and the check doesn't, list it for `03`.
 
 *1.6.1 (changes since 1.6.0):*
 
@@ -164,7 +171,7 @@ Produce `PROJECT_PROFILE.md` at the project root containing every value gathered
 - VCS status, commit/contributor counts, and any detected commit-message convention
 - Version/release status
 - Existing automation detected, and whether it looks like a pre-existing quality-gate system specifically
-- Sentinel version (1.6.1), and whether this was a fresh run or an update run — if an update, from which prior version, and whether an existing quality-gate hook needs re-validation as a result
+- Sentinel version (1.7.0), and whether this was a fresh run or an update run — if an update, from which prior version, and whether an existing quality-gate hook needs re-validation as a result
 - Whether this was a blank/near-empty project run (per Part 0a), and which fields were deferred as a result rather than evaluated-and-empty
 - Which of AGENTS.md / README / LICENSE / .gitignore / Sentinel-Notes/ / scratch/ already exist
 - Path to an existing design document, if one was found (or "none found")

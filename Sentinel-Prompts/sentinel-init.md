@@ -1,10 +1,10 @@
 # Sentinel: Init (Portable — runs 00 through 03 in sequence)
 
-**Version 1.6.1**
+**Version 1.7.0**
 
 This is a thin orchestrator, not a fifth prompt with its own logic. It exists to remove the friction of manually pasting four separate files one at a time — it does not change what any of them do, and it does not collapse or skip the review checkpoints each one already has. If you'd rather run the four prompts individually, or jump into the middle of the sequence, use them directly; this file is a convenience wrapper around the exact same process.
 
-**Requires all four Sentinel prompt files to be present and readable in this project** (`00-project-discovery.md`, `01-design-quality-audit.md`, `02-integration-audit.md`, `03-quality-gate-implementation.md`). If any are missing, say so and stop rather than trying to reconstruct their content from memory. Also look for leftover files from the renamed-files check in Part 0 of `00-project-discovery.md` (today, `03-gate-check-implementation.md`). If one is there, say so once, ask before deleting it, and never run it in place of the current file.
+**Requires all four Sentinel prompt files to be present and readable in this project** (`00-project-discovery.md`, `01-design-quality-audit.md`, `02-integration-audit.md`, `03-quality-gate-implementation.md`). The same folder also holds the optional `04-maintainer-guide.md`. An update downloads it with the rest, but no run needs it. If any of the four are missing, say so and stop rather than trying to reconstruct their content from memory. Also look for leftover files from the renamed-files check in Part 0 of `00-project-discovery.md` (today, `03-gate-check-implementation.md`). If one is there, say so once, ask before deleting it, and never run it in place of the current file.
 
 ---
 
@@ -37,6 +37,10 @@ Fill its `[PROJECT-SPECIFIC]` brackets from `PROJECT_PROFILE.md` per `00`'s own 
 ### Step 3 — Run `02-integration-audit.md` in full
 
 Same handoff: fill its brackets from `PROJECT_PROFILE.md`, follow it exactly as written, including its own confirmation points (commit-message style, granularity preference, and the rest of its Part 4/5 questions).
+
+### Step 3b — Offer the optional maintainer guide
+
+Skip this step on a blank or near-empty project, on an update run that Step 1 narrowed to `03` alone, and when `PROJECT_PROFILE.md` already has a `Maintainer guide:` line. Otherwise say in two sentences what `04-maintainer-guide.md` produces (a living reference that preserves the project's scope, architecture, decisions, and progress, kept current by a rule in `AGENTS.md`) and ask whether to run it now. If the user doesn't say yes, skip it; it never runs by default. If yes, follow `04` in full, including its own questions, before Step 4, so `03` can build the guide's check in the same pass. The user can also run `04` any time later, and then `03` needs to run again to build that check.
 
 ### Step 4 — Run `03-quality-gate-implementation.md` in full
 
