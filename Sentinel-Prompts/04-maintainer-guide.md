@@ -1,6 +1,6 @@
 # Sentinel: Maintainer Guide Prompt (Portable, optional, for any AI coding agent, any project)
 
-**Version 1.7.0**
+**Version 1.7.1**
 
 This prompt is optional. The other four don't need it, and nothing in the suite runs it unless the user asks. It maintains a living reference for developers that documents the project's scope, architecture, decisions, current state, and development progress. Its purpose is to preserve project knowledge, give an up-to-date picture of the whole project, and make it easier to resume work after time away, including for a developer who didn't write the code. It reads the project and writes files, and it proposes one quality gate without building it. Run it after `00-project-discovery.md`, and ideally after `02-integration-audit.md` and before `03-quality-gate-implementation.md`, so `03` can build the guide's check in the same pass. Run it again later to verify or change the guide.
 
@@ -79,7 +79,7 @@ Create `Sentinel-Maintainer-Guide/` at the project root. If that name is already
 - *Invariants.* Assumptions the code relies on but doesn't enforce (ordering, units, ID formats, values that must stay in sync). Mark each as enforced or unenforced.
 - *Fragile zones and debt.* Tightly coupled or hard-to-test code, workarounds, and known issues, each with a severity.
 - *Build, run, test.* The exact commands, and how to deploy if that applies.
-- *Progress.* One entry per development session, three to six lines on what changed, why, and which guide sections were updated. Newest first. Keep the latest 15 entries and drop older ones, since `git log` holds the rest.
+- *Progress.* One entry per development session, three to six lines on what changed in the project, why, and which guide sections were updated. A session that only edits the guide, such as a verify run, gets one line. Newest first. On the first run, start the log with a "History to date" entry drawn from the version history and `git log`, marked `[UNVERIFIED]` where you can't confirm it. Keep that entry and the latest 15 session entries, and drop older ones, since `git log` holds the rest.
 
 **One page that grows.** The same `GUIDE.md`, plus `Sentinel-Maintainer-Guide/areas/<area>.md`, one file per covered area, holding that area's architecture, key code, state, where-to-change, invariants, and fragile spots. Start with the areas the user names, or with none. The coverage map in the header lists each area as covered, partly covered, or not covered, so a missing entry isn't read as the code not existing.
 
@@ -98,7 +98,7 @@ Create `Sentinel-Maintainer-Guide/` at the project root. If that name is already
 - `10-recipes.md`: step-by-step procedures for common manual edits, with the checks to run afterward.
 - `11-build-run-test.md`: exact commands to build, run, test, and debug locally.
 - `12-verification-checklists.md`: per-feature steps a person can follow to confirm it works.
-- `CHANGELOG-human.md`: the progress log. One entry per development session, three to six lines on what changed, why, and which guide files were updated. Newest first, kept in full.
+- `CHANGELOG-human.md`: the progress log. One entry per development session, three to six lines on what changed in the project, why, and which guide files were updated. A session that only edits the guide, such as a verify run, gets one line. Newest first, kept in full. On the first run, start it with a "History to date" entry drawn from the version history and `git log`, marked `[UNVERIFIED]` where you can't confirm it.
 
 Before calling this part done, check every path, identifier, and command in what you wrote against the code, one by one. List everything still marked `[UNVERIFIED]`.
 
@@ -117,7 +117,7 @@ Make the smallest additions that keep the guide current. Don't rewrite the other
 
 Ask which the user wants.
 
-- **Verify.** For every file in the folder, re-check each path, identifier, and command against the code. Fix drift. Remove `[UNVERIFIED]` where you can now confirm the claim. Check the scope and current-state text against the project as it is now, trim the progress log to its cap, check the coverage map against the project's current areas, and check the update rule against `AGENTS.md`. Update the verification date and commit in the guide and in the profile line. Report how many items were fixed and what is still unconfirmed.
+- **Verify.** For every file in the folder, re-check each path, identifier, and command against the code. Fix drift. Remove `[UNVERIFIED]` where you can now confirm the claim. Check the scope and current-state text against the project as it is now, trim the progress log to its cap, add a one-line entry for the verify run itself, check the coverage map against the project's current areas, and check the update rule against `AGENTS.md`. Update the verification date and commit in the guide and in the profile line. Report how many items were fixed and what is still unconfirmed.
 - **Change the option.** Run Part 1's question again, naming the current option. Moving to a bigger option adds files. Moving to a smaller one needs a plain confirmation before anything is deleted.
 - **Remove.** Confirm, then delete the folder, the `AGENTS.md` rule and note, and the proposed or built check, and set the profile line to `Maintainer guide: none`.
 
