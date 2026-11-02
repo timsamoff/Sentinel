@@ -58,7 +58,7 @@
         "codeRepository": "https://github.com/timsamoff/Sentinel",
         "programmingLanguage": "Markdown",
         "license": "https://github.com/timsamoff/Sentinel/blob/main/LICENSE",
-        "version": "1.6.1",
+        "version": "1.7.0",
         "author": {"@type": "Person", "name": "Tim Samoff", "url": "https://samoff.com/"}
       }
     ]
@@ -95,7 +95,7 @@
     <section class="hero" id="top">
       <img src="media/sentinel-icon-352.png" width="160" height="160" alt="Sentinel">
       <h1>Sentinel</h1>
-      <p class="version">Version 1.6.1</p>
+      <p class="version">Version 1.7.0</p>
       <p class="tagline">Rigorous, repeatable quality gates for any AI coding agent, any project, any language.</p>
       <p class="actions">
         <a class="button" href="#installation">Install</a>
@@ -121,6 +121,7 @@
         <li><a href="#what-to-expect">What to expect</a></li>
         <li><a href="#commits-and-comments">Commits and comments</a></li>
         <li><a href="#sessions-and-handoffs">Sessions and handoffs</a></li>
+        <li><a href="#maintainer-guide">Maintainer guide</a></li>
         <li><a href="#upgrading">Upgrading</a></li>
         <li><a href="#what-you-end-up-with">What you end up with</a></li>
         <li><a href="#limitations">Limitations</a></li>
@@ -131,7 +132,7 @@
 
     <section id="what-it-does">
       <h2>What it does</h2>
-      <p>Sentinel is a set of four prompts that give an AI coding agent a structured process for any code or design project. The agent learns what the project is, audits its code and design quality, and maps every place a future change needs to touch. It then builds automated checks that hold those standards in place.</p>
+      <p>Sentinel is a set of four prompts, plus an optional fifth, that give an AI coding agent a structured process for any code or design project. The agent learns what the project is, audits its code and design quality, and maps every place a future change needs to touch. It then builds automated checks that hold those standards in place.</p>
       <p>Setup is the expensive part. The prompts read your actual codebase and history, which costs time and tokens once. In return, you get a pre-commit hook that checks only each commit’s diff, plus a periodic full-repo scan for slower drift, so ordinary commits stay cheap.</p>
       <p>Three terms come up often:</p>
       <ul>
@@ -156,7 +157,7 @@
       <p>Run one of these commands from your project’s root. If you don’t have <code>curl</code>, use the <code>wget</code> command. Neither command needs git.</p>
       <h3>Curl</h3>
       <div class="code-block">
-        <pre tabindex="0" role="group" aria-label="Curl install command"><code id="install-curl">mkdir -p Sentinel-Prompts &amp;&amp; cd Sentinel-Prompts &amp;&amp; for f in 00-project-discovery.md 01-design-quality-audit.md 02-integration-audit.md 03-quality-gate-implementation.md sentinel-init.md; do curl -sO "https://raw.githubusercontent.com/timsamoff/Sentinel/main/Sentinel-Prompts/$f"; done &amp;&amp; cd ..</code></pre>
+        <pre tabindex="0" role="group" aria-label="Curl install command"><code id="install-curl">mkdir -p Sentinel-Prompts &amp;&amp; cd Sentinel-Prompts &amp;&amp; for f in 00-project-discovery.md 01-design-quality-audit.md 02-integration-audit.md 03-quality-gate-implementation.md 04-maintainer-guide.md sentinel-init.md; do curl -sO "https://raw.githubusercontent.com/timsamoff/Sentinel/main/Sentinel-Prompts/$f"; done &amp;&amp; cd ..</code></pre>
         <button type="button" class="copy-button" data-copy-target="install-curl" aria-label="Copy curl install command" hidden>
           <svg class="icon-copy" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
             <rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
@@ -170,7 +171,7 @@
       </div>
       <h3>Wget</h3>
       <div class="code-block">
-        <pre tabindex="0" role="group" aria-label="Wget install command"><code id="install-wget">mkdir -p Sentinel-Prompts &amp;&amp; cd Sentinel-Prompts &amp;&amp; for f in 00-project-discovery.md 01-design-quality-audit.md 02-integration-audit.md 03-quality-gate-implementation.md sentinel-init.md; do wget -q "https://raw.githubusercontent.com/timsamoff/Sentinel/main/Sentinel-Prompts/$f"; done &amp;&amp; cd ..</code></pre>
+        <pre tabindex="0" role="group" aria-label="Wget install command"><code id="install-wget">mkdir -p Sentinel-Prompts &amp;&amp; cd Sentinel-Prompts &amp;&amp; for f in 00-project-discovery.md 01-design-quality-audit.md 02-integration-audit.md 03-quality-gate-implementation.md 04-maintainer-guide.md sentinel-init.md; do wget -q "https://raw.githubusercontent.com/timsamoff/Sentinel/main/Sentinel-Prompts/$f"; done &amp;&amp; cd ..</code></pre>
         <button type="button" class="copy-button" data-copy-target="install-wget" aria-label="Copy wget install command" hidden>
           <svg class="icon-copy" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
             <rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
@@ -192,18 +193,19 @@
 
     <section id="the-prompts">
       <h2>The prompts</h2>
-      <p><code>sentinel-init.md</code> runs the four prompts in order. It’s the recommended way to use the suite, and it’s unnumbered because it’s a wrapper.</p>
+      <p><code>sentinel-init.md</code> runs the four prompts in order and offers the optional fifth. It’s the recommended way to use the suite, and it’s unnumbered because it’s a wrapper.</p>
       <ol class="sequence" role="list" start="0">
         <li><code>00-project-discovery.md</code> detects the project’s stack, surfaces, and conventions, and asks you for what it can’t detect. It produces <code>PROJECT_PROFILE.md</code>, which the later prompts read. On a blank or nearly empty project, it asks you directly instead of inferring.</li>
         <li><code>01-design-quality-audit.md</code> audits code quality. Where there is a user interface, it also checks design consistency: color and spacing systems, responsive layout, accessibility, and whether the interface looks generic or machine-made. It checks for a design document or offers to create one. It reports what it finds. The only changes it makes are comment cleanup and project notes, each after you confirm a plan.</li>
         <li><code>02-integration-audit.md</code> reads the project’s history to find every place a new feature has needed to touch, including places that were missed. It produces <code>INTEGRATION_CHECKLIST.md</code> and proposes quality gates without building them.</li>
         <li><code>03-quality-gate-implementation.md</code> re-validates the proposals from <span class="prompt-num">01</span> and <span class="prompt-num">02</span> against the current code, then builds and wires in the quality gates. It’s the only prompt that implements.</li>
+        <li><code>04-maintainer-guide.md</code> is optional. It maintains a living “human maintenance” reference guide for developers, documenting a project’s scope, architecture, decisions, current state, and development progress. Its purpose is to preserve project knowledge, provide an up-to-date picture of the entire project, and make it easier to resume work after time away. You choose the level of documentation, from none to a comprehensive set of files. See <a href="#maintainer-guide">Maintainer guide</a>.</li>
       </ol>
     </section>
 
     <section id="running-the-suite">
       <h2>Running the suite</h2>
-      <p>Point your agent at <code>Sentinel-Prompts/sentinel-init.md</code> and it runs all four prompts. It moves from one prompt to the next on its own. Before prompt <span class="prompt-num">3</span>, it always stops and asks you to confirm that you’ve reviewed what <span class="prompt-num">01</span> and <span class="prompt-num">02</span> proposed. Each prompt’s own questions also stop and wait for you.</p>
+      <p>Point your agent at <code>Sentinel-Prompts/sentinel-init.md</code> and it runs all four prompts. It moves from one prompt to the next on its own, and offers the optional maintainer guide after prompt <span class="prompt-num">2</span>. Before prompt <span class="prompt-num">3</span>, it always stops and asks you to confirm that you’ve reviewed what <span class="prompt-num">01</span> and <span class="prompt-num">02</span> proposed. Each prompt’s own questions also stop and wait for you.</p>
       <details>
         <summary>Running one prompt at a time.</summary>
         <p>You can also run a single prompt. Paste its contents into a session, or ask the agent to read and run the file. When you want to review between prompts, need only one or two prompts, or are re-running part of the suite after an update, run the prompts individually.</p>
@@ -305,6 +307,12 @@
       </details>
     </section>
 
+    <section id="maintainer-guide">
+      <h2>Maintainer guide</h2>
+      <p>Prompt <span class="prompt-num">4</span> is optional, and <code>sentinel-init.md</code> offers it once after prompt <span class="prompt-num">2</span>. It measures the project, reports the file and line counts, and recommends one of four choices: no guide, a one-page guide, a one-page guide that grows as commits touch new areas, or a full guide. For a large project or one with several apps, the full guide covers only the areas you choose.</p>
+      <p>Two costs come with any guide. You review the first draft, and every later commit that changes covered code has to update the guide and add a progress entry too. The agent records that rule in <code>AGENTS.md</code> and proposes a quality gate for prompt <span class="prompt-num">3</span> to build. The gate shows a reminder when a commit changes covered source without touching the guide, or blocks the commit if you choose that. It can see that the guide was touched, not that it’s right, so you can run prompt <span class="prompt-num">4</span> again at any time to verify every path, name, and command against the code.</p>
+    </section>
+
     <section id="upgrading">
       <h2>Upgrading</h2>
       <h3>Automatic updates</h3>
@@ -341,6 +349,8 @@
         <dd>The confirmed project context, including your agent’s conventions.</dd>
         <dt><code>AGENTS.md</code> or <code>CLAUDE.md</code></dt>
         <dd>The project’s authoritative internal record, kept current by the quality gates.</dd>
+        <dt>A maintainer guide (optional)</dt>
+        <dd>A <code>Sentinel-Maintainer-Guide/</code> folder that preserves project knowledge for developers, kept current by a rule in <code>AGENTS.md</code>.</dd>
         <dt>A design document (optional)</dt>
         <dd>A narrative overview, stored at the root by default or wherever the project already keeps docs.</dd>
         <dt><code>Sentinel-Notes/</code></dt>
