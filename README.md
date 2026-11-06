@@ -3,7 +3,7 @@
 
 # Sentinel
 
-**Version 1.7.1**
+**Version 1.8.0**
 
 ***Rigorous, repeatable quality gates for any AI coding agent, any project, any language.***
 
@@ -104,7 +104,7 @@ The hook rejects trailer-shaped lines that aren't on your allowed list, and a sh
 
 The hook accepts no body or a valid bullet body and blocks prose. It can't judge whether a body was needed, so the trigger is also recorded in `AGENTS.md`.
 
-**Terse comments have a hard length.** If you pick the terse comment style, comments are limited to one or two sentences. Longer explanations go in `AGENTS.md`, not in the code.
+**Terse comments have a hard length.** If you pick the terse comment style, comments are limited to one or two sentences and two short lines. Longer explanations go in `AGENTS.md`, not in the code. If a short tracked rules file exists for remote sessions, the limit is stated there too.
 
 ## Sessions and handoffs
 
