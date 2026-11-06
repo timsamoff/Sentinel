@@ -1,6 +1,6 @@
 # Sentinel: Maintainer Guide Prompt (Portable, optional, for any AI coding agent, any project)
 
-**Version 1.7.1**
+**Version 1.8.0**
 
 This prompt is optional. The other four don't need it, and nothing in the suite runs it unless the user asks. It maintains a living reference for developers that documents the project's scope, architecture, decisions, current state, and development progress. Its purpose is to preserve project knowledge, give an up-to-date picture of the whole project, and make it easier to resume work after time away, including for a developer who didn't write the code. It reads the project and writes files, and it proposes one quality gate without building it. Run it after `00-project-discovery.md`, and ideally after `02-integration-audit.md` and before `03-quality-gate-implementation.md`, so `03` can build the guide's check in the same pass. Run it again later to verify or change the guide.
 
